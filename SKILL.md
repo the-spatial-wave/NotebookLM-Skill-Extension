@@ -1,224 +1,369 @@
 ---
 name: thespatialwave-system-os
-version: 1.0.0
-description: The Spatial Wave — Sistema operativo per pipeline NotebookLM + AntiGravity. Genera documenti markdown, audio overview, infografica, quiz, flashcards, slide deck e dashboard HTML glassmorphic (Lyra palette) da qualsiasi topic.
+version: 2.0.0
+description: The Spatial Wave — Pipeline completa NotebookLM + AntiGravity. Da topic o notebook esistente genera documenti markdown, audio, infografica, quiz, flashcards, slide deck e dashboard HTML offline-ready (Lyra palette). Tutto in locale, tutto dalla chat.
 author: The Spatial Wave
-license: MIT
-requires:
-  - notebooklm-py >= 0.3.3
-  - notebooklm-mcp
 triggers:
-  - "crea un pacchetto contenuti"
-  - "genera documentazione su"
-  - "analizza competitor"
-  - "meeting prep per"
   - "lancia pipeline TSW"
-  - "tsw mode"
+  - "crea pacchetto su"
+  - "analizza competitor"
   - "content pack"
   - "marketing intel"
+  - "nuovo notebook su"
+  - "genera documenti da"
+  - "usa notebook"
+  - "tsw mode"
+requires:
+  - notebooklm-py >= 0.3.3 (CLI nel PATH)
+  - notebooklm autenticato
 ---
 
-# THE SPATIAL WAVE — SYSTEM OS
-## NotebookLM Skill per AntiGravity
-
-Questo file istruisce AntiGravity su come eseguire la pipeline TSW completa:
-**Topic grezzo → NotebookLM → Documenti + Media + Dashboard HTML**
+# THE SPATIAL WAVE — SYSTEM OS v2.0
+## Skill per AntiGravity — Pipeline NotebookLM completa
 
 ---
 
-## PREREQUISITI (verifica prima di ogni run)
+## ISTRUZIONI PER L'AGENTE
+
+Quando l'utente ti attiva con uno dei trigger, esegui questa procedura SENZA chiedere conferma ad ogni step. Chiedi solo le informazioni mancanti all'inizio, poi esegui tutto in autonomia.
+
+---
+
+## STEP 0 — RACCOLTA INPUT
+
+Chiedi all'utente (in un'unica domanda):
+
+> "Dimmi:
+> 1. MODE: CONTENT_PACK / MARKETING_INTEL / MEETING_PREP
+> 2. TOPIC o NOTEBOOK ESISTENTE (se hai già un notebook, dammi l'ID o il nome)
+> 3. Cosa vuoi generare: TUTTO / solo documenti / solo media (audio, infografica, slide)
+> 4. Note aggiuntive (opzionale): tono, industry, competitor, piattaforma target"
+
+Poi imposta queste variabili:
+- `MODE` = CONTENT_PACK | MARKETING_INTEL | MEETING_PREP
+- `TOPIC` = stringa topic
+- `NOTEBOOK_ID` = ID notebook esistente (oppure null → crea nuovo)
+- `OUTPUT` = TUTTO | DOCS_ONLY | MEDIA_ONLY
+- `RUN_FOLDER` = `C:\Users\admin\Dev\ai-skill-notebook-knowledge\TSW-[MODE]-[TOPIC]` # Senza spazi o [ ] per compatibilità PowerShell
+
+---
+
+## STEP 1 — VERIFICA PREREQUISITI
+
+Prima di tutto verifica che il CLI sia disponibile:
 
 ```bash
-# Verifica auth NotebookLM
-notebooklm list
+notebooklm --version
+```
 
-# Se "command not found", aggiungi al PATH:
+Se fallisce:
+```bash
 $env:PATH += ";C:\Users\admin\AppData\Roaming\Python\Python313\Scripts"
-
-# Se "not authenticated":
-notebooklm login
+notebooklm --version
 ```
 
-> ⚠️ Il CLI `notebooklm` deve essere nel PATH e autenticato prima di ogni pipeline.
-> Il PATH va aggiunto manualmente ad ogni sessione PowerShell (o configurato permanentemente).
+Se ancora fallisce: avvisa l'utente e fermati.
 
 ---
 
-## MODES DISPONIBILI
+## STEP 2 — NOTEBOOK SETUP
 
-| Mode | Trigger | Output |
-|------|---------|--------|
-| `CONTENT_PACK` | "crea contenuti su [topic]" | Brief + Doc + Script + Checklist + Media |
-| `MARKETING_INTEL` | "analizza competitor [topic]" | Market Map + Personas + Funnel + Ads |
-| `MEETING_PREP` | "meeting prep per [azienda]" | Brief + Intel + Quiz + Flashcards |
+### CASO A — Notebook esistente (NOTEBOOK_ID fornito):
 
----
-
-## PIPELINE COMPLETA
-
-### Phase 0 — Input parsing
-
-Quando ricevi una richiesta, estrai:
-- `MODE`: CONTENT_PACK / MARKETING_INTEL / MEETING_PREP
-- `TOPIC`: argomento principale
-- `NOTEBOOK_EXISTING`: se l'utente menziona un notebook esistente, usalo
-- `OUTPUT_DIR`: cartella output (default: `TSW - [MODE] - [TOPIC]/`)
-
----
-
-### Phase 1 — Notebook Setup
-
-**Caso A — Notebook esistente:**
 ```bash
-notebooklm list
-notebooklm use [ID_PARZIALE]
+notebooklm use [NOTEBOOK_ID]
 notebooklm status
+notebooklm source list
 ```
 
-**Caso B — Notebook nuovo:**
-```bash
-notebooklm create "TSW - [MODE] - [TOPIC]"
-notebooklm use [ID_NUOVO]
+Mostra all'utente quante fonti ha il notebook, poi procedi al Phase 3.
 
-# Aggiungi fonti gold (3-12 URL)
+### CASO B — Topic nuovo (NOTEBOOK_ID = null):
+
+Esegui la pipeline completa partendo dal Phase 0.
+
+---
+
+# PIPELINE COMPLETA (solo per CASO B — topic nuovo)
+
+## Phase 0 — Pre-Research & Seed Data
+
+### 0.1 — Discovery Web
+
+Usa web search per trovare 10-25 fonti su `[TOPIC]`:
+- Documentazione ufficiale / siti autorevoli
+- Tutorial e case study
+- Community: Reddit, forum, Discord, Skool, Facebook Groups
+- Competitor (corsi, tool, community) — soprattutto se MODE=MARKETING_INTEL
+
+Crea cartella e file discovery:
+```bash
+mkdir "[RUN_FOLDER]"
+mkdir "[RUN_FOLDER]\sources"
+```
+
+Scrivi `[RUN_FOLDER]\00_DISCOVERY_SOURCES.md` con tabella:
+| Titolo | URL | Perché conta | Cosa estrarre |
+
+Scrivi `[RUN_FOLDER]\sources\urls.txt` con 3-12 "gold URL" (uno per riga).
+
+### 0.2 — Seed Profile
+
+Sintetizza tutto in `[RUN_FOLDER]\00_SEED_PROFILE.md` (max 2 pagine):
+- Obiettivo della run
+- Target utente + livello
+- Pain point principali (con evidenze trovate)
+- Lista fonti gold (max 12 URL)
+- Artifact da generare (checklist)
+- Competitor lista breve (se MODE=MARKETING_INTEL)
+- Note speciali dall'utente
+
+Questo file è la fonte text per NotebookLM.
+
+---
+
+## Phase 1 — Creazione Notebook
+
+```bash
+# Crea notebook
+notebooklm create "TSW - [MODE] - [TOPIC]"
+
+# Attiva il nuovo notebook (usa l'ID restituito)
+notebooklm use [NUOVO_ID]
+
+# Aggiungi seed profile come fonte text
+notebooklm source add --text "$(cat '[RUN_FOLDER]\00_SEED_PROFILE.md')" --title "TSW SEED PROFILE - [TOPIC]" --wait
+
+# Aggiungi gold URLs (uno alla volta, con --wait)
+# Leggi sources/urls.txt e aggiungi ogni URL
 notebooklm source add "https://url1.com" --wait
 notebooklm source add "https://url2.com" --wait
+# ... continua per ogni URL in urls.txt
+```
 
-# Deep research
-notebooklm source add-research "[TOPIC] best practices competitors pain points 2025 2026" --mode deep --no-wait
+---
+
+## Phase 2 — Deep Research
+
+```bash
+# Avvia deep research
+notebooklm source add-research "[TOPIC] best practices tutorial errori comuni competitor community pain points 2025 2026" --mode deep --no-wait
+
+# Aspetta completamento
 notebooklm research wait
 ```
 
-> ⚠️ CRITICO: Se deep research ritorna 40+ fonti, non importare tutto in una volta.
-> Usa `notebooklm source list` e importa in batch di 20.
-
----
-
-### Phase 2 — Generazione Documenti (notebook_query via CLI)
-
-Crea la cartella output e genera tutti i documenti markdown:
+### Import batch (CRITICO — mai importare tutto insieme):
 
 ```bash
-mkdir "TSW - [MODE] - [TOPIC]"
-cd "TSW - [MODE] - [TOPIC]"
-```
+# Controlla quante fonti ha trovato
+notebooklm source list
 
-**01_MASTER_BRIEF.md:**
-```bash
-notebooklm ask "Scrivi un MASTER BRIEF in italiano con: Obiettivo, Target, Pain Point principali (con evidenze), Promessa, Differenziatori, Struttura contenuti, CTA consigliata, KPI suggeriti. Stile chiaro e operativo." > 01_MASTER_BRIEF.md
-```
-
-**02_MAIN_DOC.md:**
-```bash
-notebooklm ask "Scrivi il documento principale in italiano, step-by-step: Perché (1 riga), Prerequisiti, Passaggi numerati, Errori comuni, Check finale, Risultato atteso. Se tecnico, includi comandi in blocchi code." > 02_MAIN_DOC.md
-```
-
-**03_SCRIPT_LYRA.md:**
-```bash
-notebooklm ask "Scrivi lo script completo per Lyra in italiano: scorrevole, senza puntini di sospensione e senza commenti meta. Tono: autorevole e calmo. Spiega il contenuto del documento principale in modo semplice." > 03_SCRIPT_LYRA.md
-```
-
-**04_CHECKLIST.md:**
-```bash
-notebooklm ask "Genera una checklist operativa con: task, tempo stimato, output richiesto, check finale. Inserisci anche: carica screenshot + 3 righe nel Lab quando appropriato." > 04_CHECKLIST.md
-```
-
-**Solo se MODE=MARKETING_INTEL, aggiungi:**
-```bash
-notebooklm ask "Crea una mappa competitor: nome, posizionamento, punti di forza, punti deboli, nostro vantaggio." > 05_MARKET_MAP.md
-notebooklm ask "Crea 2-4 personas target con: nome, età, pain point principale, obiettivo, obiezione tipica." > 06_TARGET_PERSONAS.md
-notebooklm ask "Tabella pain point → evidenza trovata nelle fonti → implicazione strategica." > 07_PAINPOINTS_EVIDENCE.md
-notebooklm ask "UVP + reason-to-believe + positioning statement per questo prodotto/servizio." > 08_OFFER_POSITIONING.md
-notebooklm ask "Funnel TOFU/MOFU/BOFU: contenuti consigliati, CTA, KPI per ogni fase." > 09_FUNNEL_BLUEPRINT.md
-notebooklm ask "10 angoli ads con headline e hook per ogni angolo. Formato tabella." > 10_ADS_ANGLES.md
-notebooklm ask "Content calendar 2-4 settimane: data, piattaforma, tipo contenuto, topic, CTA." > 11_CONTENT_CALENDAR.md
+# Importa in batch da 20 — attendi 3 secondi tra batch
+# (notebooklm source add-research gestisce questo automaticamente se usi --wait)
 ```
 
 ---
 
-### Phase 3 — Generazione Artifact Media
+## Phase 3 — Generazione Documenti
+
+Crea la cartella run se non esiste:
+```bash
+mkdir "[RUN_FOLDER]"
+```
+
+### 3.1 — Master Brief
 
 ```bash
-# Audio Overview
+notebooklm ask "Scrivi un MASTER BRIEF completo in italiano con queste sezioni: 1) Obiettivo (1 riga), 2) Target (chi è, livello, pain point principali con evidenze dalle fonti), 3) Promessa (cosa ottiene), 4) Differenziatori (rispetto ai competitor), 5) Struttura contenuti consigliata, 6) CTA principale, 7) KPI da monitorare. Stile chiaro, operativo, senza fluff." > "[RUN_FOLDER]\01_MASTER_BRIEF.md"
+```
+
+### 3.2 — Main Document
+
+```bash
+notebooklm ask "Scrivi il documento principale in italiano, struttura step-by-step: Perché (1 riga), Prerequisiti, Passaggi numerati con istruzioni precise, Errori comuni da evitare, Check finale, Risultato atteso. Se il topic è tecnico includi comandi in blocchi code. Scrivi in modo che un principiante possa seguire." > "[RUN_FOLDER]\02_MAIN_DOC.md"
+```
+
+### 3.3 — Script Lyra
+
+```bash
+notebooklm ask "Scrivi lo script completo per la voce Lyra in italiano. Tono: autorevole, calmo, architettonico. Niente puntini di sospensione, niente commenti meta tipo 'ora parliamo di...'. Deve spiegare il contenuto del documento principale come se stessi insegnando a voce a qualcuno di intelligente. Fluente e naturale." > "[RUN_FOLDER]\03_SCRIPT_LYRA.md"
+```
+
+### 3.4 — Checklist
+
+```bash
+notebooklm ask "Genera una checklist operativa in italiano con: task specifico, tempo stimato, output richiesto, check di verifica. Segui l'ordine logico del MAIN_DOC. Aggiungi step 'carica screenshot + 3 righe nel Lab' dove appropriato." > "[RUN_FOLDER]\04_CHECKLIST.md"
+```
+
+### 3.5 — Solo se MODE=MARKETING_INTEL:
+
+```bash
+notebooklm ask "Crea una mappa competitor con tabella: Nome, Posizionamento, Punti di forza, Punti deboli, Nostro vantaggio differenziale." > "[RUN_FOLDER]\05_MARKET_MAP.md"
+
+notebooklm ask "Crea 2-4 personas target con: Nome, Età, Ruolo, Pain point principale (con citazione da fonti), Obiettivo, Obiezione tipica, Come raggiungerlo." > "[RUN_FOLDER]\06_TARGET_PERSONAS.md"
+
+notebooklm ask "Tabella pain point → evidenza trovata nelle fonti → implicazione strategica per noi. Almeno 8 righe." > "[RUN_FOLDER]\07_PAINPOINTS_EVIDENCE.md"
+
+# NOTA: in MARKETING_INTEL i file 09-11 sono riservati ai documenti strategici
+# Gli artifact media usano 12-16 per evitare conflitti
+
+notebooklm ask "Scrivi UVP (Unique Value Proposition), reason-to-believe con 3 prove concrete, positioning statement. Poi tagline breve (max 8 parole)." > "[RUN_FOLDER]\08_OFFER_POSITIONING.md"
+
+notebooklm ask "Funnel TOFU/MOFU/BOFU completo: per ogni fase indica contenuti consigliati, piattaforma, CTA, KPI. Formato tabella." > "[RUN_FOLDER]\09_FUNNEL_BLUEPRINT.md"
+
+notebooklm ask "10 angoli ads con: Angolo, Headline principale, Hook per video/reel, Formato consigliato. Basati sui pain point reali trovati nelle fonti." > "[RUN_FOLDER]\10_ADS_ANGLES.md"
+
+notebooklm ask "Content calendar 4 settimane: data, piattaforma, tipo contenuto, topic specifico, CTA, note produzione. Formato tabella." > "[RUN_FOLDER]\11_CONTENT_CALENDAR.md"
+```
+
+---
+
+## Phase 4 — Artifact Media
+
+Avvia in background senza aspettare:
+
+```bash
 notebooklm generate audio --no-wait
-# ... lavora su altro ...
-notebooklm artifact poll --type audio
-notebooklm download audio ./09_AUDIO_BRIEF.mp3
-
-# Infografica
-notebooklm generate infographic --orientation portrait --detail-level detailed --no-wait
-notebooklm artifact poll --type infographic
-notebooklm download infographic ./10_INFOGRAPHIC.png
-
-# Quiz
+notebooklm generate infographic --orientation portrait --no-wait
 notebooklm generate quiz --difficulty medium --no-wait
-notebooklm artifact poll --type quiz
-notebooklm download quiz --format markdown ./07_QUIZ.md
-
-# Flashcards
 notebooklm generate flashcards --no-wait
-notebooklm artifact poll --type flashcards
-notebooklm download flashcards --format markdown ./08_FLASHCARDS.md
-
-# Slide Deck
 notebooklm generate slide-deck --no-wait
-notebooklm artifact poll --type slide-deck
-notebooklm download slide-deck ./11_SLIDE_DECK.pdf
 ```
 
-> ⚠️ FAIL GRACEFULLY:
-> - Se infografica fallisce: continua, annota in 00_INDEX.md
-> - Se audio > 5 min: annota "generating" e prosegui
-> - Se flashcards < 8 Q&A: esegui `notebooklm ask "Genera 10 flashcard Q&A in italiano. Formato: Q: ... / A: ..."` e appendi
+Aspetta completamento:
+```bash
+notebooklm artifact list
+# Ripeti ogni 2 minuti finché tutti sono completed
+```
+
+Scarica quando pronti:
+```bash
+# Se MODE=CONTENT_PACK o MEETING_PREP:
+notebooklm download quiz "[RUN_FOLDER]\07_QUIZ.md"
+notebooklm download flashcards "[RUN_FOLDER]\08_FLASHCARDS.md"
+notebooklm download audio "[RUN_FOLDER]\09_AUDIO_BRIEF.mp3"
+notebooklm download infographic "[RUN_FOLDER]\10_INFOGRAPHIC.png"
+notebooklm download slide-deck "[RUN_FOLDER]\11_SLIDE_DECK.pdf"
+
+# Se MODE=MARKETING_INTEL (numeri 12-16 per evitare conflitto con docs strategici):
+notebooklm download quiz "[RUN_FOLDER]\12_QUIZ.md"
+notebooklm download flashcards "[RUN_FOLDER]\13_FLASHCARDS.md"
+notebooklm download audio "[RUN_FOLDER]\14_AUDIO_BRIEF.mp3"
+notebooklm download infographic "[RUN_FOLDER]\15_INFOGRAPHIC.png"
+notebooklm download slide-deck "[RUN_FOLDER]\16_SLIDE_DECK.pdf"
+```
+
+**Fallback flashcards** — se il file ha meno di 8 Q&A:
+```bash
+# CONTENT_PACK/MEETING_PREP:
+notebooklm ask "Genera 10 flashcard Q&A in italiano sul topic [TOPIC]. Formato esatto: Q: [domanda] / A: [risposta]. Una per riga." >> "[RUN_FOLDER]\08_FLASHCARDS.md"
+# MARKETING_INTEL:
+notebooklm ask "Genera 10 flashcard Q&A in italiano sul topic [TOPIC]. Formato esatto: Q: [domanda] / A: [risposta]. Una per riga." >> "[RUN_FOLDER]\13_FLASHCARDS.md"
+```
 
 ---
 
-### Phase 4 — Index
+## Phase 5 — Dashboard HTML
 
-Crea `00_INDEX.md` con:
-- Tabella file generati + descrizione
-- Contatore fonti NotebookLM
-- Link al notebook: `https://notebooklm.google.com/notebook/[ID]`
-- Istruzioni: "Apri index.html nel browser per la dashboard completa"
+Leggi il template da:
+`C:\Users\admin\Dev\NotebookLM-Skill-Extension-CLEAN\templates\dashboard_template.html`
 
----
-
-### Phase 5 — Dashboard HTML
-
-Copia il template da `templates/dashboard_template.html` nella cartella run come `index.html`.
-Sostituisci i placeholder:
+Sostituisci TUTTI i placeholder con il contenuto reale:
 - `{{TOPIC}}` → topic della run
 - `{{MODE}}` → mode usato
 - `{{DATE}}` → data odierna
-- `{{NOTEBOOK_URL}}` → link al notebook
+- `{{NOTEBOOK_ID}}` → ID del notebook
+- `{{NOTEBOOK_URL}}` → `https://notebooklm.google.com/notebook/[ID]`
+- `{{CONTENT_BRIEF}}` → contenuto completo di 01_MASTER_BRIEF.md
+- `{{CONTENT_DOC}}` → contenuto completo di 02_MAIN_DOC.md
+- `{{CONTENT_SCRIPT}}` → contenuto completo di 03_SCRIPT_LYRA.md
+- `{{CONTENT_CHECKLIST}}` → contenuto completo di 04_CHECKLIST.md
+- `{{CONTENT_QUIZ_RAW}}` → contenuto completo di 07_QUIZ.md
+- `{{CONTENT_FLASHCARDS_RAW}}` → contenuto completo di 08_FLASHCARDS.md
+- `{{SOURCES_LIST}}` → contenuto di sources/urls.txt formattato come HTML list
+- `{{FILE_COUNT}}` → numero file generati
+- `{{TOTAL_SIZE}}` → dimensione totale cartella
 
-La dashboard carica i `.md` dinamicamente via `fetch()` — assicurati che i file siano nella stessa cartella.
+Salva come `[RUN_FOLDER]\index.html`.
+
+---
+
+## Phase 6 — Index File
+
+Crea `[RUN_FOLDER]\00_INDEX.md`:
+
+```markdown
+# TSW — [MODE]: [TOPIC]
+**Data:** [DATA]
+**Notebook:** https://notebooklm.google.com/notebook/[ID]
+
+## File Generati
+| File | Tipo | Descrizione |
+[tabella con tutti i file]
+
+## Come usare
+1. Apri index.html nel browser
+2. Ascolta 09_AUDIO_BRIEF.mp3
+3. Studia con 07_QUIZ.md e 08_FLASHCARDS.md
+4. Presenta con 11_SLIDE_DECK.pdf
+```
+
+---
+
+## FAIL GRACEFULLY
+
+- Se infografica fallisce → continua, segna "PENDING" nell'index
+- Se audio > 10 min → segna "GENERATING" e continua
+- Se flashcards < 8 Q&A → usa fallback query
+- La dashboard deve funzionare anche senza i file media
+- Mai bloccarsi su un singolo step
 
 ---
 
 ## VINCOLI NON NEGOZIABILI
 
-1. **Batch import**: mai 100+ fonti in un colpo — chunk da 20
-2. **Sicurezza**: mai credenziali/token in output
-3. **Notebook isolato**: ogni run = notebook separato (o usa esistente se esplicitamente richiesto)
-4. **Fail gracefully**: la dashboard deve funzionare anche senza media
-5. **Lingua**: output sempre in italiano salvo diversa indicazione
+1. Mai importare 100+ fonti in un colpo — chunk da 20
+2. Mai inserire credenziali o token nell'output
+3. Notebook isolato per ogni run
+4. Output sempre in italiano salvo diversa indicazione
+5. Chiedi i parametri UNA VOLTA all'inizio — poi esegui tutto da solo
 
 ---
 
-## STRUTTURA OUTPUT ATTESA
+## STRUTTURA OUTPUT FINALE
 
 ```
 TSW - [MODE] - [TOPIC]/
 ├── 00_INDEX.md
+├── 00_DISCOVERY_SOURCES.md      ← solo se notebook nuovo
+├── 00_SEED_PROFILE.md           ← solo se notebook nuovo
 ├── 01_MASTER_BRIEF.md
 ├── 02_MAIN_DOC.md
 ├── 03_SCRIPT_LYRA.md
 ├── 04_CHECKLIST.md
+│
+│   ── CONTENT_PACK / MEETING_PREP:
 ├── 07_QUIZ.md
 ├── 08_FLASHCARDS.md
 ├── 09_AUDIO_BRIEF.mp3
 ├── 10_INFOGRAPHIC.png
 ├── 11_SLIDE_DECK.pdf
-└── index.html
+│
+│   ── MARKETING_INTEL (aggiuntivi):
+├── 05_MARKET_MAP.md
+├── 06_TARGET_PERSONAS.md
+├── 07_PAINPOINTS_EVIDENCE.md
+├── 08_OFFER_POSITIONING.md
+├── 09_FUNNEL_BLUEPRINT.md
+├── 10_ADS_ANGLES.md
+├── 11_CONTENT_CALENDAR.md
+├── 12_QUIZ.md
+├── 13_FLASHCARDS.md
+├── 14_AUDIO_BRIEF.mp3
+├── 15_INFOGRAPHIC.png
+├── 16_SLIDE_DECK.pdf
+├── index.html                   ← dashboard con tutto embedded
+└── sources/
+    └── urls.txt
 ```

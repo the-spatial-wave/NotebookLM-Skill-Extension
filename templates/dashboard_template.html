@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{TOPIC}} — TSW Strategic Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Inter:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00f2ff;
+            --secondary: #7000ff;
+            --bg: #050505;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .header {
+            height: 40vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at center, #1a0033 0%, #050505 100%);
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3.5rem;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: -50px auto 50px;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .card h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .card pre {
+            white-space: pre-wrap;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 50px;
+            background: var(--secondary);
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 50px;
+            border-top: 1px solid var(--glass-border);
+            color: #666;
+            font-size: 0.8rem;
+        }
+
+        a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .sources-list {
+            list-style: none;
+            font-size: 0.85rem;
+        }
+
+        .sources-list li {
+            margin-bottom: 8px;
+            color: #888;
+            border-left: 2px solid var(--secondary);
+            padding-left: 10px;
+        }
+
+        .media-grid {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .media-link {
+            background: var(--glass-border);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            border: 1px solid transparent;
+        }
+
+        .media-link:hover {
+            border-color: var(--primary);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="tag">TSW SYSTEM OS v2.0 - {{MODE}}</div>
+        <h1>{{TOPIC}}</h1>
+        <p>Strategic Intelligence Dashboard — {{DATE}}</p>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h2>Master Brief</h2>
+            <div style="font-size: 0.95rem; color: #ddd;">
+                {{CONTENT_BRIEF}}
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Documentazione Core</h2>
+            <ul class="sources-list" style="color: #eee; font-size: 1rem;">
+                <li><a href="01_MASTER_BRIEF.md">01. Master Brief Strategico</a></li>
+                <li><a href="02_MAIN_DOC.md">02. Main Document Operativo</a></li>
+                <li><a href="03_SCRIPT_LYRA.md">03. Script Lyra Voice</a></li>
+                <li><a href="04_CHECKLIST.md">04. Checklist Task Operativi</a></li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>Learning Assets</h2>
+            <p style="margin-bottom:15px; font-size: 0.9rem; color: #888;">Quiz e Flashcards per il consolidamento delle
+                competenze sul topic.</p>
+            <div class="media-grid">
+                <a href="07_QUIZ.md" class="media-link">View Quiz</a>
+                <a href="08_FLASHCARDS.md" class="media-link">Study Flashcards</a>
+            </div>
+
+            <h3 style="margin-top:25px; font-size: 1rem; color: var(--secondary);">Raw Data Extract</h3>
+            <div
+                style="max-height: 200px; overflow-y: auto; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px; margin-top: 10px; border: 1px solid var(--glass-border);">
+                <pre style="font-size: 0.75rem;">{{CONTENT_QUIZ_RAW}}</pre>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Media & Artifacts</h2>
+            <p style="font-size: 0.9rem; color: #888;">Download degli asset multimediali generati da NotebookLM.</p>
+            <div class="media-grid">
+                <a href="09_AUDIO_BRIEF.mp3" class="media-link">Audio Brief (.mp3)</a>
+                <a href="10_INFOGRAPHIC.png" class="media-link">Infographic (.png)</a>
+                <a href="11_SLIDE_DECK.pdf" class="media-link">Slide Deck (.pdf)</a>
+            </div>
+
+            <h3 style="margin-top:25px; font-size: 1rem; color: var(--secondary);">Fonti Gold Analyzed</h3>
+            <ul class="sources-list" style="margin-top: 10px;">
+                {{SOURCES_LIST}}
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer">
+        Generated by AntiGravity x The Spatial Wave — Pipeline v2.0<br>
+        Notebook ID: <a href="{{NOTEBOOK_URL}}" style="color:#888">{{NOTEBOOK_ID}}</a><br>
+        Files: {{FILE_COUNT}} | Total Size: {{TOTAL_SIZE}}
+    </div>
+</body>
+
+</html>
