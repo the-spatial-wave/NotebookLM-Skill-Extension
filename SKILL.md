@@ -1,6 +1,6 @@
 ---
 name: thespatialwave-system-os
-version: 2.0.0
+version: 2.2.0
 description: The Spatial Wave — Pipeline completa NotebookLM + AntiGravity. Da topic o notebook esistente genera documenti markdown, audio, infografica, quiz, flashcards, slide deck e dashboard HTML offline-ready (Lyra palette). Tutto in locale, tutto dalla chat.
 author: The Spatial Wave
 triggers:
@@ -37,14 +37,23 @@ Chiedi all'utente (in un'unica domanda):
 > 1. MODE: CONTENT_PACK / MARKETING_INTEL / MEETING_PREP
 > 2. TOPIC o NOTEBOOK ESISTENTE (se hai già un notebook, dammi l'ID o il nome)
 > 3. Cosa vuoi generare: TUTTO / solo documenti / solo media (audio, infografica, slide)
-> 4. Note aggiuntive (opzionale): tono, industry, competitor, piattaforma target"
+> 4. Note aggiuntive (opzionale): tono, industry, competitor, piattaforma target
+> 5. **Piattaforma prioritaria per il Kanban** (scelta tra: Facebook, Instagram, Threads, TikTok, LinkedIn, Skool)"
 
 Poi imposta queste variabili:
 - `MODE` = CONTENT_PACK | MARKETING_INTEL | MEETING_PREP
 - `TOPIC` = stringa topic
 - `NOTEBOOK_ID` = ID notebook esistente (oppure null → crea nuovo)
 - `OUTPUT` = TUTTO | DOCS_ONLY | MEDIA_ONLY
-- `RUN_FOLDER` = `C:\Users\admin\Dev\ai-skill-notebook-knowledge\TSW-[MODE]-[TOPIC]` # Senza spazi o [ ] per compatibilità PowerShell
+- `PRIORITY_PLATFORM` = Instagram | Facebook | TikTok | LinkedIn | Threads | Skool (default: Instagram)
+- `RUN_FOLDER` = `C:\Users\admin\Dev\ai-skill-notebook-knowledge\TSW-[MODE]-[TOPIC_SAFE]`
+  dove `TOPIC_SAFE` = topic senza spazi e caratteri speciali (es. "Lyra-Hub", "XR-Reset")
+  **⚠️ Mai usare spazi, parentesi [ ] o trattini nel percorso cartella — causano errori PowerShell**
+  ```bash
+  # Esempio calcolo TOPIC_SAFE in PowerShell:
+  $TOPIC_SAFE = "Lyra Hub — positioning e funnel" -replace "[^a-zA-Z0-9]", "-" -replace "-+", "-"
+  $RUN_FOLDER = "C:\Users\admin\Dev\ai-skill-notebook-knowledge\TSW-CONTENT_PACK-$TOPIC_SAFE"
+  ```
 
 ---
 
@@ -88,13 +97,50 @@ Esegui la pipeline completa partendo dal Phase 0.
 
 ## Phase 0 — Pre-Research & Seed Data
 
-### 0.1 — Discovery Web
+### ⚠️ PRIMA DI TUTTO — Rilevamento tipo di topic
+
+Valuta se il TOPIC è:
+
+**A) Topic pubblico** (tecnologia, mercato, strategia, tool esistenti)
+→ Esegui Discovery Web normalmente (Step 0.1)
+
+**B) Brand personale / prodotto inventato** (es. "Lyra Hub", "XR Reset", brand TSW)
+→ NON cercare sul web — troveresti aziende omonime sbagliate
+→ Esegui Step 0.0 (raccolta materiali dall'utente)
+
+**Come riconoscere un brand personale:**
+- Non ha sito ufficiale indicizzato
+- È un nome inventato / unico
+- L'utente lo descrive come "mio prodotto", "mia community", "mio brand"
+- Non ci sono risultati web affidabili nelle prime 3 ricerche
+
+---
+
+### Step 0.0 — SOLO per brand personali — Raccolta materiali utente
+
+Chiedi all'utente in un'unica domanda:
+
+> "Questo topic sembra un tuo brand/prodotto personale. Per creare contenuti accurati ho bisogno dei tuoi materiali originali. Incollami:
+> 1. **Descrizione del prodotto/brand** (anche informale — cosa fa, per chi, quanto costa, cosa lo rende unico)
+> 2. **Script o testi già scritti** (video, audio, post, email — qualsiasi testo esistente)
+> 3. **Target reale** (chi compra, che problema risolve, che livello ha)
+> 4. **URL tuoi** se hai sito, landing page, profili social, Skool community"
+
+Usa le risposte come **fonte primaria** per il Seed Profile.
+Non cercare sul web per fonti gold — usa solo i materiali forniti dall'utente + eventualmente ricerca su competitor (non sul brand stesso).
+
+---
+
+### Step 0.1 — Discovery Web (solo per topic pubblici)
 
 Usa web search per trovare 10-25 fonti su `[TOPIC]`:
 - Documentazione ufficiale / siti autorevoli
 - Tutorial e case study
 - Community: Reddit, forum, Discord, Skool, Facebook Groups
 - Competitor (corsi, tool, community) — soprattutto se MODE=MARKETING_INTEL
+
+**⚠️ IMPORTANTE:** Cerca SOLO fonti pertinenti al topic esatto.
+Se i primi risultati non corrispondono al topic (es. trovano un'azienda omonima), fermati e tratta il topic come brand personale → vai a Step 0.0.
 
 Crea cartella e file discovery:
 ```bash
@@ -107,18 +153,42 @@ Scrivi `[RUN_FOLDER]\00_DISCOVERY_SOURCES.md` con tabella:
 
 Scrivi `[RUN_FOLDER]\sources\urls.txt` con 3-12 "gold URL" (uno per riga).
 
-### 0.2 — Seed Profile
+---
+
+### Step 0.2 — Seed Profile
+
+Crea cartella se non esiste:
+```bash
+mkdir "[RUN_FOLDER]"
+mkdir "[RUN_FOLDER]\sources"
+```
 
 Sintetizza tutto in `[RUN_FOLDER]\00_SEED_PROFILE.md` (max 2 pagine):
 - Obiettivo della run
-- Target utente + livello
-- Pain point principali (con evidenze trovate)
-- Lista fonti gold (max 12 URL)
+- Target utente REALE + livello (basato su materiali utente, non ipotesi generiche)
+- Pain point principali (con evidenze — citazioni da materiali utente o da fonti web)
+- Lista fonti gold (max 12 URL) — OPPURE testo seed se brand personale
 - Artifact da generare (checklist)
 - Competitor lista breve (se MODE=MARKETING_INTEL)
 - Note speciali dall'utente
+- Tono e voice del brand (es. "Lyra: calmo, architettonico, autorevole")
 
-Questo file è la fonte text per NotebookLM.
+Questo file è la fonte text primaria per NotebookLM.
+
+---
+
+### Step 0.2 — Website Scrape & Enrichment Avanzato (solo MEETING_PREP o MARKETING_INTEL competitor)
+
+Se MODE=MEETING_PREP o si analizza un competitor corporate, cerca:
+- Sito ufficiale: About, Product/Service, Pricing, Team, Press, Careers
+- LinkedIn company page (employee count, post recenti, hiring activity)
+- Crunchbase / PitchBook (funding rounds, investors, valuation)
+- News ultimi 6 mesi (TechCrunch, Il Sole 24 Ore, settore specifico)
+- Wikipedia (se esiste)
+- Glassdoor (segnali cultura aziendale)
+- YouTube (video fondatori / pitch / demo)
+
+Output: aggiungi URL trovati a `sources/urls.txt` e annota in `00_DISCOVERY_SOURCES.md`.
 
 ---
 
@@ -131,14 +201,16 @@ notebooklm create "TSW - [MODE] - [TOPIC]"
 # Attiva il nuovo notebook (usa l'ID restituito)
 notebooklm use [NUOVO_ID]
 
-# Aggiungi seed profile come fonte text
-notebooklm source add --text "$(cat '[RUN_FOLDER]\00_SEED_PROFILE.md')" --title "TSW SEED PROFILE - [TOPIC]" --wait
+# Aggiungi seed profile come fonte text (PowerShell)
+$seedText = Get-Content -LiteralPath "$RUN_FOLDER\00_SEED_PROFILE.md" -Raw -Encoding utf8
+notebooklm source add --text $seedText --title "TSW SEED PROFILE - $TOPIC" --wait
 
 # Aggiungi gold URLs (uno alla volta, con --wait)
-# Leggi sources/urls.txt e aggiungi ogni URL
-notebooklm source add "https://url1.com" --wait
-notebooklm source add "https://url2.com" --wait
-# ... continua per ogni URL in urls.txt
+$urls = Get-Content -LiteralPath "$RUN_FOLDER\sources\urls.txt" | Where-Object { $_.Trim() -ne "" }
+foreach ($url in $urls) {
+    notebooklm source add $url.Trim() --wait
+    Start-Sleep -Seconds 2
+}
 ```
 
 ---
@@ -147,7 +219,12 @@ notebooklm source add "https://url2.com" --wait
 
 ```bash
 # Avvia deep research
-notebooklm source add-research "[TOPIC] best practices tutorial errori comuni competitor community pain points 2025 2026" --mode deep --no-wait
+# Per topic PUBBLICI:
+notebooklm source add-research "$TOPIC best practices tutorial errori comuni competitor community pain points 2025 2026" --mode deep --no-wait
+
+# Per BRAND PERSONALI (Lyra Hub, XR Reset, ecc.) — cerca sul mercato, NON sul brand:
+# notebooklm source add-research "immersive web XR content factory creator italiano community Skool 2025 2026" --mode deep --no-wait
+# ⚠️ Sostituisci la query con il settore/mercato del brand, mai con il nome del brand stesso
 
 # Aspetta completamento
 notebooklm research wait
@@ -196,7 +273,19 @@ notebooklm ask "Scrivi lo script completo per la voce Lyra in italiano. Tono: au
 notebooklm ask "Genera una checklist operativa in italiano con: task specifico, tempo stimato, output richiesto, check di verifica. Segui l'ordine logico del MAIN_DOC. Aggiungi step 'carica screenshot + 3 righe nel Lab' dove appropriato." > "[RUN_FOLDER]\04_CHECKLIST.md"
 ```
 
-### 3.5 — Solo se MODE=MARKETING_INTEL:
+### 3.5 — Solo se MODE=MEETING_PREP:
+
+```bash
+notebooklm ask "Scrivi un briefing pre-meeting completo in italiano: 1) Company Overview (background, dimensioni, leadership, business model), 2) Landscape Competitivo, 3) Opportunità di Mercato (dati e cifre specifiche), 4) Key Talking Points (numerati, azionabili), 5) Gestione Obiezioni (tabella Obiezione/Risposta), 6) Next Steps consigliati." > "$RUN_FOLDER\05_MEETING_BRIEF.md"
+
+notebooklm ask "Crea schede bio per i partecipanti al meeting: Nome, Ruolo, Background, Interessi professionali, Come approcciarli. Basati sulle fonti LinkedIn/web trovate." > "$RUN_FOLDER\06_PARTICIPANT_BIOS.md"
+
+notebooklm ask "Analisi trimestrale: performance recente dell'azienda, KPI pubblici disponibili, trend del settore, rischi e opportunità per i prossimi 90 giorni." > "$RUN_FOLDER\07_QUARTERLY_INTEL.md"
+
+notebooklm ask "Mappa dei potenziali punti di frizione: cosa potrebbe bloccare la collaborazione, obiezioni probabili, aree di disaccordo e come gestirle proattivamente." > "$RUN_FOLDER\08_FRICTION_MAP.md"
+```
+
+### 3.6 — Solo se MODE=MARKETING_INTEL:
 
 ```bash
 notebooklm ask "Crea una mappa competitor con tabella: Nome, Posizionamento, Punti di forza, Punti deboli, Nostro vantaggio differenziale." > "[RUN_FOLDER]\05_MARKET_MAP.md"
@@ -219,16 +308,69 @@ notebooklm ask "Content calendar 4 settimane: data, piattaforma, tipo contenuto,
 
 ---
 
+### 3.7 — Kanban Ingestion (12_KANBAN_DATA.json)
+
+Genera il file ponte strutturato per AI Content Factory.
+Esegui SEMPRE questo step, sia per CONTENT_PACK che MARKETING_INTEL.
+
+```bash
+notebooklm ask "Basandoti sui contenuti generati (Calendar, Ads Angles, Script), crea un array JSON di card pronte per un sistema Kanban editoriale. Per ogni card usa ESATTAMENTE questi campi (nessun campo extra, nessun campo mancante):
+{
+  'platform': uno tra: Facebook | Instagram | Threads | TikTok | LinkedIn | Skool,
+  'format': uno tra: Post | Reel | Carosello,
+  'title': titolo breve e accattivante (max 60 caratteri),
+  'hook': la frase gancio iniziale (max 120 caratteri),
+  'copy': corpo del messaggio completo,
+  'funnel_stage': uno tra: Awareness | Interest | Desire | Conversion | Retention,
+  'brand_voice': uno tra: CALM | DIRECT | AUTHORITY,
+  'hashtags': array di stringhe senza simbolo # (es: ['digitalreset', 'webxr']),
+  'product': nome del prodotto/brand,
+  'status': 'idle'
+}
+Genera almeno 8 card, privilegia la piattaforma $PRIORITY_PLATFORM.
+IMPORTANTE: Restituisci SOLO il JSON puro, nessun testo prima o dopo, nessun markdown." > "$RUN_FOLDER\12_KANBAN_DATA.json"
+```
+
+Verifica che il JSON sia valido:
+```bash
+$json = Get-Content -LiteralPath "$RUN_FOLDER\12_KANBAN_DATA.json" -Raw -Encoding utf8
+try { $null = $json | ConvertFrom-Json; Write-Host "OK: 12_KANBAN_DATA.json valido" }
+catch { Write-Host "ERRORE JSON — rilancia la query con prompt più restrittivo" }
+```
+
+**Mapping Brand Voice obbligatorio:**
+| Tono NotebookLM | Campo JSON da usare |
+|-----------------|---------------------|
+| Calm / Calmo / Architettonico | CALM |
+| Direct / Diretto / Operativo | DIRECT |
+| Authoritative / Autorevole | AUTHORITY |
+
+---
+
 ## Phase 4 — Artifact Media
+
+### ⚠️ ORDINE CRITICO per MARKETING_INTEL
+Se MODE=MARKETING_INTEL, verifica che i file 05-11 siano stati generati in Phase 3.6 PRIMA di avviare gli artifact media. Gli artifact usano numeri 12-16 per evitare conflitti. Controlla:
+```bash
+Test-Path "$RUN_FOLDER\11_CONTENT_CALENDAR.md"
+# Se False → torna a Phase 3.6 e genera i file mancanti
+```
 
 Avvia in background senza aspettare:
 
 ```bash
 notebooklm generate audio --no-wait
-notebooklm generate infographic --orientation portrait --no-wait
-notebooklm generate quiz --difficulty medium --no-wait
-notebooklm generate flashcards --no-wait
-notebooklm generate slide-deck --no-wait
+notebooklm generate infographic --orientation portrait --detail-level detailed --no-wait
+notebooklm generate quiz --difficulty medium --question-count 8 --no-wait
+notebooklm generate flashcards --difficulty medium --no-wait
+notebooklm generate slide-deck --format detailed_deck --no-wait
+
+# Parametri MCP equivalenti (se usi notebooklm-mcp invece del CLI):
+# mcp: studio_create → artifact_type: "infographic", orientation: "portrait", detail_level: "detailed"
+# mcp: studio_create → artifact_type: "audio", audio_format: "brief", audio_length: "short"
+# mcp: studio_create → artifact_type: "quiz", question_count: 8, difficulty: "medium"
+# mcp: studio_create → artifact_type: "flashcards", difficulty: "medium"
+# mcp: studio_create → artifact_type: "slide_deck", slide_format: "detailed_deck"
 ```
 
 Aspetta completamento:
@@ -266,26 +408,120 @@ notebooklm ask "Genera 10 flashcard Q&A in italiano sul topic [TOPIC]. Formato e
 
 ## Phase 5 — Dashboard HTML
 
-Leggi il template da:
+### Stack tecnologico del template (NON modificare)
+Il `dashboard_template.html` usa già:
+- **Marked.js** via CDN — per rendering dinamico Markdown nelle tab
+- **Font Awesome 6** — icone
+- **Orbitron + Manrope** — font Lyra palette
+- **Quiz interattivo** — feedback verde/rosso on-click
+- **Flashcards flip 3D** — CSS perspective + rotateY(180deg)
+- **Audio player** — con visualizer animato
+
+⚠️ NON aggiungere librerie esterne. NON modificare la struttura HTML.
+Il tuo unico compito in Phase 5 è sostituire i placeholder con il contenuto reale.
+
+### ⚠️ REGOLA ASSOLUTA — NON NEGOZIABILE
+**NON creare mai un nuovo file HTML da zero.**
+**NON usare un template diverso.**
+**USA SEMPRE e SOLO il file:**
 `C:\Users\admin\Dev\NotebookLM-Skill-Extension-CLEAN\templates\dashboard_template.html`
 
-Sostituisci TUTTI i placeholder con il contenuto reale:
-- `{{TOPIC}}` → topic della run
-- `{{MODE}}` → mode usato
-- `{{DATE}}` → data odierna
-- `{{NOTEBOOK_ID}}` → ID del notebook
-- `{{NOTEBOOK_URL}}` → `https://notebooklm.google.com/notebook/[ID]`
-- `{{CONTENT_BRIEF}}` → contenuto completo di 01_MASTER_BRIEF.md
-- `{{CONTENT_DOC}}` → contenuto completo di 02_MAIN_DOC.md
-- `{{CONTENT_SCRIPT}}` → contenuto completo di 03_SCRIPT_LYRA.md
-- `{{CONTENT_CHECKLIST}}` → contenuto completo di 04_CHECKLIST.md
-- `{{CONTENT_QUIZ_RAW}}` → contenuto completo di 07_QUIZ.md
-- `{{CONTENT_FLASHCARDS_RAW}}` → contenuto completo di 08_FLASHCARDS.md
-- `{{SOURCES_LIST}}` → contenuto di sources/urls.txt formattato come HTML list
-- `{{FILE_COUNT}}` → numero file generati
-- `{{TOTAL_SIZE}}` → dimensione totale cartella
+Se il file non esiste, fermati e avvisa l'utente. Non procedere.
 
-Salva come `[RUN_FOLDER]\index.html`.
+### Procedura obbligatoria:
+
+**Step 1 — Leggi il template:**
+```bash
+$template = Get-Content -LiteralPath "C:\Users\admin\Dev\NotebookLM-Skill-Extension-CLEAN\templates\dashboard_template.html" -Raw -Encoding utf8
+```
+
+**Step 2 — Leggi tutti i file MD:**
+```bash
+$brief      = Get-Content -LiteralPath "[RUN_FOLDER]\01_MASTER_BRIEF.md" -Raw -Encoding utf8
+$doc        = Get-Content -LiteralPath "[RUN_FOLDER]\02_MAIN_DOC.md" -Raw -Encoding utf8
+$script     = Get-Content -LiteralPath "[RUN_FOLDER]\03_SCRIPT_LYRA.md" -Raw -Encoding utf8
+$checklist  = Get-Content -LiteralPath "[RUN_FOLDER]\04_CHECKLIST.md" -Raw -Encoding utf8
+$quiz       = Get-Content -LiteralPath "[RUN_FOLDER]\07_QUIZ.md" -Raw -Encoding utf8
+$flashcards = Get-Content -LiteralPath "[RUN_FOLDER]\08_FLASHCARDS.md" -Raw -Encoding utf8
+$sources    = Get-Content -LiteralPath "[RUN_FOLDER]\sources\urls.txt" -Raw -Encoding utf8
+```
+
+**Step 3 — Sostituisci i placeholder nel template:**
+```bash
+$html = $template
+$html = $html.Replace("{{TOPIC}}", $TOPIC)
+$html = $html.Replace("{{MODE}}", $MODE)
+$html = $html.Replace("{{DATE}}", (Get-Date -Format "dd/MM/yyyy"))
+$html = $html.Replace("{{NOTEBOOK_ID}}", $NOTEBOOK_ID)
+$html = $html.Replace("{{NOTEBOOK_URL}}", "https://notebooklm.google.com/notebook/$NOTEBOOK_ID")
+$html = $html.Replace("{{CONTENT_BRIEF}}", $brief)
+$html = $html.Replace("{{CONTENT_DOC}}", $doc)
+$html = $html.Replace("{{CONTENT_SCRIPT}}", $script)
+$html = $html.Replace("{{CONTENT_CHECKLIST}}", $checklist)
+$html = $html.Replace("{{CONTENT_QUIZ_RAW}}", $quiz)
+$html = $html.Replace("{{CONTENT_FLASHCARDS_RAW}}", $flashcards)
+
+# FIX 4 — FILE_COUNT calcolato dinamicamente
+$fileCount = (Get-ChildItem -LiteralPath $RUN_FOLDER -File | Measure-Object).Count
+$totalSize = "{0:N0} MB" -f ((Get-ChildItem -LiteralPath $RUN_FOLDER -Recurse -File | Measure-Object -Property Length -Sum).Sum / 1MB)
+$html = $html.Replace("{{FILE_COUNT}}", $fileCount.ToString())
+$html = $html.Replace("{{TOTAL_SIZE}}", "~$totalSize")
+```
+
+**Step 4 — Genera lista fonti HTML:**
+```bash
+$sourceLines = $sources -split "`n" | Where-Object { $_.Trim() -ne "" }
+$sourcesHtml = ($sourceLines | ForEach-Object -Begin {$i=0} -Process {
+  $i++
+  "<div class='source-item'><div class='source-num'>$i</div><a href='$($_.Trim())' target='_blank' class='source-url'>$($_.Trim())</a></div>"
+}) -join "`n"
+$html = $html.Replace("{{SOURCES_LIST}}", $sourcesHtml)
+```
+
+**Step 5 — Salva:**
+```bash
+$html | Out-File -LiteralPath "[RUN_FOLDER]\index.html" -Encoding utf8
+```
+
+**Step 6 — Verifica:**
+```bash
+# Controlla che il file esista e abbia dimensione > 50KB
+$size = (Get-Item -LiteralPath "[RUN_FOLDER]\index.html").Length
+if ($size -lt 50000) { Write-Host "ERRORE: index.html troppo piccolo ($size bytes) — ripeti Phase 5" }
+else { Write-Host "OK: index.html generato ($size bytes)" }
+```
+
+---
+
+## Phase 5.1 — Kanban Synchronization
+
+**Obiettivo:** La dashboard deve leggere `12_KANBAN_DATA.json` e permettere di iniettare le card in AI Content Factory con un click.
+
+Dopo la sostituzione dei placeholder in Phase 5, aggiungi questo placeholder aggiuntivo:
+
+```bash
+# Leggi il JSON Kanban
+$kanbanJson = Get-Content -LiteralPath "$RUN_FOLDER\12_KANBAN_DATA.json" -Raw -Encoding utf8
+$html = $html.Replace("{{KANBAN_DATA_JSON}}", $kanbanJson)
+$html = $html.Replace("{{PRIORITY_PLATFORM}}", $PRIORITY_PLATFORM)
+```
+
+Il `dashboard_template.html` contiene già:
+- **Sezione "Kanban Preview"** — anteprima delle card con piattaforma, hook e fase funnel
+- **Bottone "Push to Kanban"** — injetta le card in `useKanbanStore` via `window.postMessage` o `localStorage` compatibile con AI Content Factory
+- **Normalizzazione automatica** — converte i toni Lyra nei valori esatti del Kanban (CALM/DIRECT/AUTHORITY)
+- **Filtro per piattaforma** — mostra prima le card della `PRIORITY_PLATFORM`
+
+**Come funziona l'iniezione:**
+```javascript
+// Logica già nel template — non modificare
+const cards = JSON.parse('{{KANBAN_DATA_JSON}}');
+document.getElementById('push-kanban-btn').addEventListener('click', () => {
+  localStorage.setItem('tsw_kanban_import', JSON.stringify(cards));
+  window.open('https://ai-video-factory-ten.vercel.app', '_blank');
+  // AI Content Factory legge tsw_kanban_import al mount e popola il board
+});
+```
 
 ---
 
@@ -343,9 +579,18 @@ TSW - [MODE] - [TOPIC]/
 ├── 03_SCRIPT_LYRA.md
 ├── 04_CHECKLIST.md
 │
-│   ── CONTENT_PACK / MEETING_PREP:
+│   ── CONTENT_PACK:
 ├── 07_QUIZ.md
 ├── 08_FLASHCARDS.md
+├── 09_AUDIO_BRIEF.mp3
+├── 10_INFOGRAPHIC.png
+├── 11_SLIDE_DECK.pdf
+│
+│   ── MEETING_PREP (aggiuntivi):
+├── 05_MEETING_BRIEF.md
+├── 06_PARTICIPANT_BIOS.md
+├── 07_QUARTERLY_INTEL.md
+├── 08_FRICTION_MAP.md
 ├── 09_AUDIO_BRIEF.mp3
 ├── 10_INFOGRAPHIC.png
 ├── 11_SLIDE_DECK.pdf
@@ -363,7 +608,8 @@ TSW - [MODE] - [TOPIC]/
 ├── 14_AUDIO_BRIEF.mp3
 ├── 15_INFOGRAPHIC.png
 ├── 16_SLIDE_DECK.pdf
-├── index.html                   ← dashboard con tutto embedded
+├── 12_KANBAN_DATA.json          ← ponte strutturato per AI Content Factory
+├── index.html                   ← dashboard con Push to Kanban button
 └── sources/
     └── urls.txt
 ```
