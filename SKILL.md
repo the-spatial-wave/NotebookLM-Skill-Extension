@@ -1,6 +1,6 @@
 ---
 name: thespatialwave-system-os
-version: 2.2.0
+version: 2.3.0-CLEAN
 description: The Spatial Wave — Pipeline completa NotebookLM + AntiGravity. Da topic o notebook esistente genera documenti markdown, audio, infografica, quiz, flashcards, slide deck e dashboard HTML offline-ready (Lyra palette). Tutto in locale, tutto dalla chat.
 author: The Spatial Wave
 triggers:
@@ -38,14 +38,12 @@ Chiedi all'utente (in un'unica domanda):
 > 2. TOPIC o NOTEBOOK ESISTENTE (se hai già un notebook, dammi l'ID o il nome)
 > 3. Cosa vuoi generare: TUTTO / solo documenti / solo media (audio, infografica, slide)
 > 4. Note aggiuntive (opzionale): tono, industry, competitor, piattaforma target
-> 5. **Piattaforma prioritaria per il Kanban** (scelta tra: Facebook, Instagram, Threads, TikTok, LinkedIn, Skool)"
-
+"
 Poi imposta queste variabili:
 - `MODE` = CONTENT_PACK | MARKETING_INTEL | MEETING_PREP
 - `TOPIC` = stringa topic
 - `NOTEBOOK_ID` = ID notebook esistente (oppure null → crea nuovo)
 - `OUTPUT` = TUTTO | DOCS_ONLY | MEDIA_ONLY
-- `PRIORITY_PLATFORM` = Instagram | Facebook | TikTok | LinkedIn | Threads | Skool (default: Instagram)
 - `RUN_FOLDER` = `C:\Users\admin\Dev\ai-skill-notebook-knowledge\TSW-[MODE]-[TOPIC_SAFE]`
   dove `TOPIC_SAFE` = topic senza spazi e caratteri speciali (es. "Lyra-Hub", "XR-Reset")
   **⚠️ Mai usare spazi, parentesi [ ] o trattini nel percorso cartella — causano errori PowerShell**
@@ -308,44 +306,6 @@ notebooklm ask "Content calendar 4 settimane: data, piattaforma, tipo contenuto,
 
 ---
 
-### 3.7 — Kanban Ingestion (12_KANBAN_DATA.json)
-
-Genera il file ponte strutturato per AI Content Factory.
-Esegui SEMPRE questo step, sia per CONTENT_PACK che MARKETING_INTEL.
-
-```bash
-notebooklm ask "Basandoti sui contenuti generati (Calendar, Ads Angles, Script), crea un array JSON di card pronte per un sistema Kanban editoriale. Per ogni card usa ESATTAMENTE questi campi (nessun campo extra, nessun campo mancante):
-{
-  'platform': uno tra: Facebook | Instagram | Threads | TikTok | LinkedIn | Skool,
-  'format': uno tra: Post | Reel | Carosello,
-  'title': titolo breve e accattivante (max 60 caratteri),
-  'hook': la frase gancio iniziale (max 120 caratteri),
-  'copy': corpo del messaggio completo,
-  'funnel_stage': uno tra: Awareness | Interest | Desire | Conversion | Retention,
-  'brand_voice': uno tra: CALM | DIRECT | AUTHORITY,
-  'hashtags': array di stringhe senza simbolo # (es: ['digitalreset', 'webxr']),
-  'product': nome del prodotto/brand,
-  'status': 'idle'
-}
-Genera almeno 8 card, privilegia la piattaforma $PRIORITY_PLATFORM.
-IMPORTANTE: Restituisci SOLO il JSON puro, nessun testo prima o dopo, nessun markdown." > "$RUN_FOLDER\12_KANBAN_DATA.json"
-```
-
-Verifica che il JSON sia valido:
-```bash
-$json = Get-Content -LiteralPath "$RUN_FOLDER\12_KANBAN_DATA.json" -Raw -Encoding utf8
-try { $null = $json | ConvertFrom-Json; Write-Host "OK: 12_KANBAN_DATA.json valido" }
-catch { Write-Host "ERRORE JSON — rilancia la query con prompt più restrittivo" }
-```
-
-**Mapping Brand Voice obbligatorio:**
-| Tono NotebookLM | Campo JSON da usare |
-|-----------------|---------------------|
-| Calm / Calmo / Architettonico | CALM |
-| Direct / Diretto / Operativo | DIRECT |
-| Authoritative / Autorevole | AUTHORITY |
-
----
 
 ## Phase 4 — Artifact Media
 
@@ -493,37 +453,6 @@ else { Write-Host "OK: index.html generato ($size bytes)" }
 
 ---
 
-## Phase 5.1 — Kanban Synchronization
-
-**Obiettivo:** La dashboard deve leggere `12_KANBAN_DATA.json` e permettere di iniettare le card in AI Content Factory con un click.
-
-Dopo la sostituzione dei placeholder in Phase 5, aggiungi questo placeholder aggiuntivo:
-
-```bash
-# Leggi il JSON Kanban
-$kanbanJson = Get-Content -LiteralPath "$RUN_FOLDER\12_KANBAN_DATA.json" -Raw -Encoding utf8
-$html = $html.Replace("{{KANBAN_DATA_JSON}}", $kanbanJson)
-$html = $html.Replace("{{PRIORITY_PLATFORM}}", $PRIORITY_PLATFORM)
-```
-
-Il `dashboard_template.html` contiene già:
-- **Sezione "Kanban Preview"** — anteprima delle card con piattaforma, hook e fase funnel
-- **Bottone "Push to Kanban"** — injetta le card in `useKanbanStore` via `window.postMessage` o `localStorage` compatibile con AI Content Factory
-- **Normalizzazione automatica** — converte i toni Lyra nei valori esatti del Kanban (CALM/DIRECT/AUTHORITY)
-- **Filtro per piattaforma** — mostra prima le card della `PRIORITY_PLATFORM`
-
-**Come funziona l'iniezione:**
-```javascript
-// Logica già nel template — non modificare
-const cards = JSON.parse('{{KANBAN_DATA_JSON}}');
-document.getElementById('push-kanban-btn').addEventListener('click', () => {
-  localStorage.setItem('tsw_kanban_import', JSON.stringify(cards));
-  window.open('https://ai-video-factory-ten.vercel.app', '_blank');
-  // AI Content Factory legge tsw_kanban_import al mount e popola il board
-});
-```
-
----
 
 ## Phase 6 — Index File
 
@@ -608,8 +537,7 @@ TSW - [MODE] - [TOPIC]/
 ├── 14_AUDIO_BRIEF.mp3
 ├── 15_INFOGRAPHIC.png
 ├── 16_SLIDE_DECK.pdf
-├── 12_KANBAN_DATA.json          ← ponte strutturato per AI Content Factory
-├── index.html                   ← dashboard con Push to Kanban button
+├── index.html                   ← dashboard offline-ready
 └── sources/
     └── urls.txt
 ```

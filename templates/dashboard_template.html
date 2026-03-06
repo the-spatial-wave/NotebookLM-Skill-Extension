@@ -4,16 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{TOPIC}} — TSW Strategic Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Inter:wght@400;700&display=swap"
+    <title>TSW Dashboard — {{TOPIC}}</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Orbitron:wght@400;600;700&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
     <style>
         :root {
-            --primary: #00f2ff;
-            --secondary: #7000ff;
-            --bg: #050505;
-            --glass: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --void: #080C12;
+            --deep: #0F1C2E;
+            --cyan: #00E5FF;
+            --magenta: #FF2FD6;
+            --teal: #2EF2C9;
+            --violet: #7A6CFF;
+            --gold: #FFB547;
+            --silver: #C8CCD6;
+            --fog: rgba(184, 192, 204, 0.45);
+            --glass: rgba(255, 255, 255, 0.04);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --grad-main: linear-gradient(135deg, #00E5FF, #FF2FD6);
+            --grad-deep: radial-gradient(circle at 30% 50%, rgba(0, 229, 255, 0.06), #080C12 70%);
         }
 
         * {
@@ -23,192 +34,1260 @@
         }
 
         body {
-            background-color: var(--bg);
-            color: #fff;
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
+            background: var(--void);
+            color: var(--silver);
+            font-family: 'Manrope', sans-serif;
+            min-height: 100vh;
             overflow-x: hidden;
         }
 
+        /* ── HEADER ── */
         .header {
-            height: 40vh;
+            padding: 20px 40px;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
-            background: radial-gradient(circle at center, #1a0033 0%, #050505 100%);
-            position: relative;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--glass-border);
+            background: rgba(8, 12, 18, 0.92);
+            backdrop-filter: blur(24px);
+            position: sticky;
+            top: 0;
+            z-index: 200;
         }
 
-        h1 {
-            font-family: 'Outfit', sans-serif;
-            font-size: 3.5rem;
-            letter-spacing: 2px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            background: var(--grad-main);
             -webkit-background-clip: text;
-            background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-            text-align: center;
-            padding: 0 20px;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: -50px auto 50px;
-            padding: 20px;
+        .header-meta {
+            font-size: 11px;
+            color: rgba(200, 204, 214, 0.3);
+            letter-spacing: 1px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            color: var(--cyan);
+            padding: 8px 16px;
+            border-radius: 7px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+        }
+
+        /* ── LAYOUT ── */
+        .layout {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 25px;
+            grid-template-columns: 280px 1fr;
+            min-height: calc(100vh - 61px);
         }
 
-        .card {
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 30px;
-            transition: transform 0.3s ease;
+        /* ── SIDEBAR ── */
+        .sidebar {
+            background: rgba(15, 28, 46, 0.3);
+            border-right: 1px solid var(--glass-border);
+            padding: 28px 0;
+            position: sticky;
+            top: 61px;
+            height: calc(100vh - 61px);
+            overflow-y: auto;
         }
 
-        .card:hover {
-            border-color: var(--primary);
-            transform: translateY(-5px);
+        .sidebar-section {
+            padding: 0 20px;
+            margin-bottom: 28px;
         }
 
-        .card h2 {
-            color: var(--primary);
-            margin-bottom: 15px;
-            font-family: 'Outfit', sans-serif;
-        }
-
-        .card pre {
-            white-space: pre-wrap;
-            font-size: 0.9rem;
-            color: #ccc;
-        }
-
-        .tag {
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 50px;
-            background: var(--secondary);
-            font-size: 0.8rem;
+        .sidebar-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: rgba(200, 204, 214, 0.25);
+            text-transform: uppercase;
             margin-bottom: 10px;
         }
 
-        .footer {
-            text-align: center;
-            padding: 50px;
-            border-top: 1px solid var(--glass-border);
-            color: #666;
-            font-size: 0.8rem;
-        }
-
-        a {
-            color: var(--primary);
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        .sources-list {
-            list-style: none;
-            font-size: 0.85rem;
-        }
-
-        .sources-list li {
-            margin-bottom: 8px;
-            color: #888;
-            border-left: 2px solid var(--secondary);
-            padding-left: 10px;
-        }
-
-        .media-grid {
+        .sidebar-item {
             display: flex;
+            align-items: center;
             gap: 10px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-
-        .media-link {
-            background: var(--glass-border);
-            padding: 8px 12px;
+            padding: 9px 12px;
             border-radius: 8px;
-            font-size: 0.8rem;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            color: rgba(200, 204, 214, 0.5);
+            transition: all 0.15s;
+            margin-bottom: 2px;
             border: 1px solid transparent;
         }
 
-        .media-link:hover {
-            border-color: var(--primary);
+        .sidebar-item:hover {
+            background: rgba(0, 229, 255, 0.05);
+            color: var(--silver);
+        }
+
+        .sidebar-item.active {
+            background: rgba(0, 229, 255, 0.08);
+            color: var(--cyan);
+            border-color: rgba(0, 229, 255, 0.1);
+        }
+
+        .sidebar-item i {
+            width: 16px;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        .notebook-card {
+            background: rgba(0, 229, 255, 0.04);
+            border: 1px solid rgba(0, 229, 255, 0.1);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin: 0 20px 10px;
+        }
+
+        .notebook-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--silver);
+            margin-bottom: 4px;
+        }
+
+        .notebook-id {
+            font-size: 10px;
+            color: rgba(200, 204, 214, 0.3);
+            font-family: 'Orbitron', sans-serif;
+            word-break: break-all;
+        }
+
+        .notebook-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+            font-size: 10px;
+            color: var(--cyan);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 8px;
+            margin: 0 20px 6px;
+        }
+
+        .stat-chip {
+            flex: 1;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .stat-num {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--cyan);
+        }
+
+        .stat-label {
+            font-size: 9px;
+            color: rgba(200, 204, 214, 0.35);
+            letter-spacing: 1px;
+            margin-top: 2px;
+        }
+
+        .file-list {
+            padding: 0 20px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 10px;
+            border-radius: 7px;
+            cursor: pointer;
+            transition: all 0.15s;
+            margin-bottom: 3px;
+        }
+
+        .file-item:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .file-name {
+            font-size: 11px;
+            color: rgba(200, 204, 214, 0.6);
+        }
+
+        .file-name span {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 9px;
+            color: var(--cyan);
+            margin-right: 6px;
+        }
+
+        .file-dl {
+            font-size: 11px;
+            color: rgba(200, 204, 214, 0.25);
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .file-dl:hover {
+            color: var(--cyan);
+        }
+
+        /* ── MAIN ── */
+        .main {
+            padding: 32px 40px;
+            background: var(--grad-deep);
+        }
+
+        .page-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            background: var(--grad-main);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+        }
+
+        .page-sub {
+            font-size: 12px;
+            color: rgba(200, 204, 214, 0.35);
+            margin-bottom: 28px;
+        }
+
+        /* ── TABS ── */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            border-bottom: 1px solid var(--glass-border);
+            margin-bottom: 28px;
+        }
+
+        .tab {
+            padding: 10px 18px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            color: rgba(200, 204, 214, 0.35);
+            border-bottom: 2px solid transparent;
+            transition: all 0.15s;
+        }
+
+        .tab:hover {
+            color: var(--silver);
+        }
+
+        .tab.active {
+            color: var(--cyan);
+            border-bottom-color: var(--cyan);
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        /* ── CARDS CONTENT ── */
+        .content-card {
+            background: rgba(15, 28, 46, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .content-card h3 {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(200, 204, 214, 0.3);
+            margin-bottom: 14px;
+        }
+
+        .md-body {
+            font-size: 13px;
+            color: rgba(200, 204, 214, 0.75);
+            line-height: 1.8;
+        }
+
+        .md-body h1,
+        .md-body h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--silver);
+            margin: 16px 0 8px;
+        }
+
+        .md-body h3 {
+            color: var(--cyan);
+            margin: 12px 0 6px;
+            font-size: 13px;
+        }
+
+        .md-body p {
+            margin-bottom: 10px;
+        }
+
+        .md-body ul,
+        .md-body ol {
+            margin: 8px 0 8px 20px;
+        }
+
+        .md-body li {
+            margin-bottom: 4px;
+        }
+
+        .md-body code {
+            background: rgba(0, 229, 255, 0.08);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            color: var(--teal);
+        }
+
+        .md-body pre {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 14px;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        .md-body pre code {
+            background: none;
+            padding: 0;
+            color: var(--teal);
+        }
+
+        .md-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+
+        .md-body th {
+            background: rgba(0, 229, 255, 0.08);
+            color: var(--cyan);
+            padding: 8px 12px;
+            font-size: 11px;
+            text-align: left;
+            border: 1px solid var(--glass-border);
+        }
+
+        .md-body td {
+            padding: 8px 12px;
+            border: 1px solid var(--glass-border);
+            font-size: 12px;
+        }
+
+        .md-body blockquote {
+            border-left: 3px solid var(--cyan);
+            padding-left: 14px;
+            color: rgba(200, 204, 214, 0.5);
+            margin: 10px 0;
+            font-style: italic;
+        }
+
+        /* ── QUIZ ── */
+        .quiz-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .quiz-q {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 18px;
+        }
+
+        .quiz-question {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--silver);
+            margin-bottom: 14px;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .quiz-opt {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--glass-border);
+            cursor: pointer;
+            font-size: 12px;
+            color: rgba(200, 204, 214, 0.6);
+            transition: all 0.15s;
+        }
+
+        .quiz-opt:hover {
+            background: rgba(0, 229, 255, 0.05);
+            border-color: rgba(0, 229, 255, 0.2);
+            color: var(--silver);
+        }
+
+        .quiz-opt.correct {
+            background: rgba(46, 242, 201, 0.1);
+            border-color: var(--teal);
+            color: var(--teal);
+        }
+
+        .quiz-opt.wrong {
+            background: rgba(255, 47, 214, 0.08);
+            border-color: var(--magenta);
+            color: var(--magenta);
+        }
+
+        .quiz-opt input {
+            accent-color: var(--cyan);
+        }
+
+        .quiz-score {
+            background: rgba(0, 229, 255, 0.08);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            border-radius: 10px;
+            padding: 16px 20px;
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            color: var(--cyan);
+        }
+
+        /* ── FLASHCARDS ── */
+        .flashcards-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .flash-btn {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            color: var(--silver);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+        }
+
+        .flash-btn:hover {
+            border-color: rgba(0, 229, 255, 0.3);
+            color: var(--cyan);
+        }
+
+        .flash-counter {
+            font-size: 12px;
+            color: rgba(200, 204, 214, 0.4);
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .flashcard-wrapper {
+            perspective: 1200px;
+            height: 220px;
+            cursor: pointer;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front,
+        .flashcard-back {
+            position: absolute;
+            inset: 0;
+            border-radius: 14px;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            backface-visibility: hidden;
+        }
+
+        .flashcard-front {
+            background: linear-gradient(135deg, rgba(122, 108, 255, 0.15), rgba(0, 229, 255, 0.08));
+            border: 1px solid rgba(122, 108, 255, 0.25);
+        }
+
+        .flashcard-back {
+            background: linear-gradient(135deg, rgba(255, 181, 71, 0.1), rgba(46, 242, 201, 0.08));
+            border: 1px solid rgba(255, 181, 71, 0.2);
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .flashcard-front .flashcard-label {
+            color: var(--violet);
+        }
+
+        .flashcard-back .flashcard-label {
+            color: var(--gold);
+        }
+
+        .flashcard-text {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--silver);
+            line-height: 1.5;
+        }
+
+        .flash-hint {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 10px;
+            color: rgba(200, 204, 214, 0.25);
+        }
+
+        .flash-dots {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 14px;
+        }
+
+        .flash-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(200, 204, 214, 0.2);
+            transition: all 0.2s;
+        }
+
+        .flash-dot.active {
+            background: var(--cyan);
+        }
+
+        .flash-dot.seen {
+            background: rgba(200, 204, 214, 0.4);
+        }
+
+        /* ── AUDIO ── */
+        .audio-player {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .audio-play-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--grad-main);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #080C12;
+            flex-shrink: 0;
+            transition: opacity 0.2s;
+        }
+
+        .audio-play-btn:hover {
+            opacity: 0.85;
+        }
+
+        .audio-info {
+            flex: 1;
+        }
+
+        .audio-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--silver);
+            margin-bottom: 3px;
+        }
+
+        .audio-sub {
+            font-size: 11px;
+            color: rgba(200, 204, 214, 0.35);
+        }
+
+        .audio-visualizer {
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            height: 32px;
+        }
+
+        .audio-bar {
+            width: 4px;
+            background: var(--cyan);
+            border-radius: 2px;
+            opacity: 0.4;
+        }
+
+        .audio-bar.playing {
+            animation: audiobar 1s ease-in-out infinite;
+        }
+
+        .audio-bar:nth-child(1) {
+            height: 40%;
+            animation-delay: 0s;
+        }
+
+        .audio-bar:nth-child(2) {
+            height: 70%;
+            animation-delay: 0.1s;
+        }
+
+        .audio-bar:nth-child(3) {
+            height: 55%;
+            animation-delay: 0.2s;
+        }
+
+        .audio-bar:nth-child(4) {
+            height: 90%;
+            animation-delay: 0.05s;
+        }
+
+        .audio-bar:nth-child(5) {
+            height: 45%;
+            animation-delay: 0.15s;
+        }
+
+        .audio-bar:nth-child(6) {
+            height: 75%;
+            animation-delay: 0.25s;
+        }
+
+        .audio-bar:nth-child(7) {
+            height: 60%;
+            animation-delay: 0.08s;
+        }
+
+        @keyframes audiobar {
+
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: scaleY(0.6)
+            }
+
+            50% {
+                opacity: 1;
+                transform: scaleY(1)
+            }
+        }
+
+        /* ── SOURCES ── */
+        .source-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--glass-border);
+            margin-bottom: 8px;
+            transition: border-color 0.15s;
+        }
+
+        .source-item:hover {
+            border-color: rgba(0, 229, 255, 0.2);
+        }
+
+        .source-num {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            color: var(--cyan);
+            min-width: 24px;
+            padding-top: 1px;
+        }
+
+        .source-url {
+            font-size: 12px;
+            color: rgba(200, 204, 214, 0.55);
+            text-decoration: none;
+            word-break: break-all;
+            line-height: 1.5;
+        }
+
+        .source-url:hover {
+            color: var(--cyan);
+        }
+
+        /* ── MEDIA SECTION ── */
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .media-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .media-card:hover {
+            border-color: rgba(0, 229, 255, 0.2);
+            background: rgba(0, 229, 255, 0.04);
+        }
+
+        .media-icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .media-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--silver);
+            margin-bottom: 4px;
+        }
+
+        .media-sub {
+            font-size: 10px;
+            color: rgba(200, 204, 214, 0.3);
+        }
+
+        .media-badge {
+            display: inline-block;
+            margin-top: 8px;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .badge-ready {
+            background: rgba(46, 242, 201, 0.1);
+            color: var(--teal);
+        }
+
+        .badge-pending {
+            background: rgba(200, 204, 214, 0.08);
+            color: rgba(200, 204, 214, 0.3);
+        }
+
+        /* ── INFOGRAPHIC ── */
+        .infographic-container img {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .infographic-missing {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            color: rgba(200, 204, 214, 0.25);
+            font-size: 12px;
+        }
+
+        /* ── GLOW ── */
+        .glow {
+            position: fixed;
+            top: -200px;
+            left: -200px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 229, 255, 0.025) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .glow2 {
+            position: fixed;
+            bottom: -100px;
+            right: -100px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 47, 214, 0.025) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .section-sep {
+            height: 1px;
+            background: var(--glass-border);
+            margin: 24px 0;
         }
     </style>
 </head>
 
 <body>
-    <div class="header">
-        <div class="tag">TSW SYSTEM OS v2.0 - {{MODE}}</div>
-        <h1>{{TOPIC}}</h1>
-        <p>Strategic Intelligence Dashboard — {{DATE}}</p>
+    <div class="glow"></div>
+    <div class="glow2"></div>
+
+    <!-- ── HEADER ── -->
+    <header class="header">
+        <div class="logo">THE SPATIAL WAVE · TSW OS</div>
+        <div class="header-meta">{{MODE}} · {{DATE}} · {{FILE_COUNT}} file · {{TOTAL_SIZE}}</div>
+        <div class="header-right">
+            <a href="{{NOTEBOOK_URL}}" target="_blank" class="btn-ghost"><i class="fa-solid fa-book-open"></i>
+                NotebookLM</a>
+        </div>
+    </header>
+
+    <!-- ── LAYOUT ── -->
+    <div class="layout">
+
+        <!-- ── SIDEBAR ── -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-label">Navigazione</div>
+                <div class="sidebar-item active" onclick="showTab('brief')"><i class="fa-solid fa-bullseye"></i> Master
+                    Brief</div>
+                <div class="sidebar-item" onclick="showTab('doc')"><i class="fa-solid fa-file-lines"></i> Documentazione
+                </div>
+                <div class="sidebar-item" onclick="showTab('script')"><i class="fa-solid fa-microphone"></i> Script Lyra
+                </div>
+                <div class="sidebar-item" onclick="showTab('checklist')"><i class="fa-solid fa-list-check"></i>
+                    Checklist</div>
+                <div class="sidebar-item" onclick="showTab('quiz')"><i class="fa-solid fa-circle-question"></i> Quiz
+                </div>
+                <div class="sidebar-item" onclick="showTab('flash')"><i class="fa-solid fa-layer-group"></i> Flashcards
+                </div>
+                <div class="sidebar-item" onclick="showTab('media')"><i class="fa-solid fa-photo-film"></i> Media</div>
+                <div class="sidebar-item" onclick="showTab('sources')"><i class="fa-solid fa-link"></i> Fonti</div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-label">Notebook</div>
+                <div class="notebook-card">
+                    <div class="notebook-title">{{TOPIC}}</div>
+                    <div class="notebook-id">{{NOTEBOOK_ID}}</div>
+                    <a href="{{NOTEBOOK_URL}}" target="_blank" class="notebook-link">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Apri in NotebookLM
+                    </a>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="stats-row">
+                    <div class="stat-chip">
+                        <div class="stat-num">{{FILE_COUNT}}</div>
+                        <div class="stat-label">File</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-label">File</div>
+                <div class="file-list" id="fileList">
+                    <div class="file-item">
+                        <span class="file-name"><span>01</span>Master Brief</span>
+                        <i class="fa-solid fa-download file-dl" onclick="downloadFile('01_MASTER_BRIEF.md')"></i>
+                    </div>
+                    <div class="file-item">
+                        <span class="file-name"><span>02</span>Main Doc</span>
+                        <i class="fa-solid fa-download file-dl" onclick="downloadFile('02_MAIN_DOC.md')"></i>
+                    </div>
+                    <div class="file-item">
+                        <span class="file-name"><span>03</span>Script Lyra</span>
+                        <i class="fa-solid fa-download file-dl" onclick="downloadFile('03_SCRIPT_LYRA.md')"></i>
+                    </div>
+                    <div class="file-item">
+                        <span class="file-name"><span>04</span>Checklist</span>
+                        <i class="fa-solid fa-download file-dl" onclick="downloadFile('04_CHECKLIST.md')"></i>
+                    </div>
+                    <div class="file-item">
+                        <span class="file-name"><span>11</span>Slide Deck</span>
+                        <i class="fa-solid fa-external-link file-dl" onclick="window.open('11_SLIDE_DECK.pdf')"></i>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ── MAIN ── -->
+        <main class="main">
+            <div class="page-title">{{TOPIC}}</div>
+            <div class="page-sub">{{MODE}} · Generato il {{DATE}}</div>
+
+            <div class="tabs">
+                <div class="tab active" id="tab-brief" onclick="showTab('brief')">Brief</div>
+                <div class="tab" id="tab-doc" onclick="showTab('doc')">Doc</div>
+                <div class="tab" id="tab-script" onclick="showTab('script')">Script</div>
+                <div class="tab" id="tab-checklist" onclick="showTab('checklist')">Checklist</div>
+                <div class="tab" id="tab-quiz" onclick="showTab('quiz')">Quiz</div>
+                <div class="tab" id="tab-flash" onclick="showTab('flash')">Flashcards</div>
+                <div class="tab" id="tab-media" onclick="showTab('media')">Media</div>
+                <div class="tab" id="tab-sources" onclick="showTab('sources')">Fonti</div>
+            </div>
+
+            <!-- BRIEF -->
+            <div class="tab-panel active" id="panel-brief">
+                <div class="content-card">
+                    <h3>Master Brief</h3>
+                    <div class="md-body" id="briefBody"></div>
+                </div>
+            </div>
+
+            <!-- DOC -->
+            <div class="tab-panel" id="panel-doc">
+                <div class="content-card">
+                    <h3>Documento Principale</h3>
+                    <div class="md-body" id="docBody"></div>
+                </div>
+            </div>
+
+            <!-- SCRIPT -->
+            <div class="tab-panel" id="panel-script">
+                <div class="content-card">
+                    <h3>Script Lyra Voice</h3>
+                    <div class="md-body" id="scriptBody"></div>
+                </div>
+            </div>
+
+            <!-- CHECKLIST -->
+            <div class="tab-panel" id="panel-checklist">
+                <div class="content-card">
+                    <h3>Checklist Operativa</h3>
+                    <div class="md-body" id="checklistBody"></div>
+                </div>
+            </div>
+
+            <!-- QUIZ -->
+            <div class="tab-panel" id="panel-quiz">
+                <div class="content-card">
+                    <h3>Quiz Interattivo</h3>
+                    <div class="quiz-container" id="quizContainer"></div>
+                    <div style="text-align:center;margin-top:20px;">
+                        <button class="btn-ghost" onclick="resetQuiz()"><i class="fa-solid fa-rotate-left"></i>
+                            Ricomincia</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FLASHCARDS -->
+            <div class="tab-panel" id="panel-flash">
+                <div class="content-card">
+                    <h3>Flashcards</h3>
+                    <div class="flashcards-nav">
+                        <button class="flash-btn" onclick="prevCard()"><i class="fa-solid fa-chevron-left"></i></button>
+                        <span class="flash-counter" id="flashCounter">1 / 1</span>
+                        <button class="flash-btn" onclick="nextCard()"><i
+                                class="fa-solid fa-chevron-right"></i></button>
+                    </div>
+                    <div class="flashcard-wrapper" onclick="flipCard()">
+                        <div class="flashcard" id="flashcard">
+                            <div class="flashcard-front">
+                                <div class="flashcard-label">Domanda</div>
+                                <div class="flashcard-text" id="flashQ">Caricamento...</div>
+                            </div>
+                            <div class="flashcard-back">
+                                <div class="flashcard-label">Risposta</div>
+                                <div class="flashcard-text" id="flashA">—</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flash-hint">Clicca per girare · ← → per navigare · Spazio per girare</div>
+                    <div class="flash-dots" id="flashDots"></div>
+                </div>
+            </div>
+
+            <!-- MEDIA -->
+            <div class="tab-panel" id="panel-media">
+                <div class="content-card">
+                    <h3>Media & Visuals</h3>
+                    <div class="media-grid" style="margin-bottom:24px;">
+                        <div class="media-card" onclick="document.getElementById('audioEl').play()">
+                            <div class="media-icon">🎙️</div>
+                            <div class="media-label">Audio Brief</div>
+                            <div class="media-sub">09_AUDIO_BRIEF.mp3</div>
+                            <div class="media-badge badge-ready">PRONTO</div>
+                        </div>
+                        <div class="media-card" onclick="window.open('11_SLIDE_DECK.pdf')">
+                            <div class="media-icon">📊</div>
+                            <div class="media-label">Slide Deck</div>
+                            <div class="media-sub">11_SLIDE_DECK.pdf</div>
+                            <div class="media-badge badge-ready">PRONTO</div>
+                        </div>
+                        <div class="media-card">
+                            <div class="media-icon">🖼️</div>
+                            <div class="media-label">Infografica</div>
+                            <div class="media-sub">10_INFOGRAPHIC.png</div>
+                            <div class="media-badge badge-ready">PRONTO</div>
+                        </div>
+                    </div>
+
+                    <div class="audio-player">
+                        <div class="audio-controls">
+                            <button class="audio-play-btn" id="playBtn" onclick="toggleAudio()">▶</button>
+                            <div class="audio-info">
+                                <div class="audio-title">Audio Brief — {{TOPIC}}</div>
+                                <div class="audio-sub">Narrazione Lyra Voice</div>
+                            </div>
+                            <div class="audio-visualizer" id="visualizer">
+                                <div class="audio-bar"></div>
+                                <div class="audio-bar"></div>
+                                <div class="audio-bar"></div>
+                                <div class="audio-bar"></div>
+                                <div class="audio-bar"></div>
+                                <div class="audio-bar"></div>
+                                <div class="audio-bar"></div>
+                            </div>
+                        </div>
+                        <audio id="audioEl" src="09_AUDIO_BRIEF.mp3" onended="stopAudio()"></audio>
+                    </div>
+
+                    <div class="section-sep"></div>
+                    <h3
+                        style="font-size:10px;font-weight:700;letter-spacing:2px;color:rgba(200,204,214,0.3);margin-bottom:14px;">
+                        INFOGRAFICA</h3>
+                    <div class="infographic-container">
+                        <img src="10_INFOGRAPHIC.png" alt="Infografica"
+                            onerror="this.parentElement.innerHTML='<div class=\'infographic-missing\'><i class=\'fa-solid fa-image\' style=\'font-size:32px;margin-bottom:12px;display:block\'></i>Infografica non ancora disponibile</div>'">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SOURCES -->
+            <div class="tab-panel" id="panel-sources">
+                <div class="content-card">
+                    <h3>Fonti Gold</h3>
+                    <div id="sourcesList">{{SOURCES_LIST}}</div>
+                </div>
+            </div>
+
+        </main>
     </div>
 
-    <div class="container">
-        <div class="card">
-            <h2>Master Brief</h2>
-            <div style="font-size: 0.95rem; color: #ddd;">
-                {{CONTENT_BRIEF}}
-            </div>
-        </div>
+    <!-- ── EMBEDDED CONTENT ── -->
+    <script type="text/markdown" id="md-brief">{{CONTENT_BRIEF}}</script>
+    <script type="text/markdown" id="md-doc">{{CONTENT_DOC}}</script>
+    <script type="text/markdown" id="md-script">{{CONTENT_SCRIPT}}</script>
+    <script type="text/markdown" id="md-checklist">{{CONTENT_CHECKLIST}}</script>
+    <script type="text/plain" id="quiz-raw">{{CONTENT_QUIZ_RAW}}</script>
+    <script type="text/plain" id="flash-raw">{{CONTENT_FLASHCARDS_RAW}}</script>
 
-        <div class="card">
-            <h2>Documentazione Core</h2>
-            <ul class="sources-list" style="color: #eee; font-size: 1rem;">
-                <li><a href="01_MASTER_BRIEF.md">01. Master Brief Strategico</a></li>
-                <li><a href="02_MAIN_DOC.md">02. Main Document Operativo</a></li>
-                <li><a href="03_SCRIPT_LYRA.md">03. Script Lyra Voice</a></li>
-                <li><a href="04_CHECKLIST.md">04. Checklist Task Operativi</a></li>
-            </ul>
-        </div>
+    <script>
+        // ── MARKED CONFIG ──
+        marked.setOptions({ breaks: true, gfm: true });
 
-        <div class="card">
-            <h2>Learning Assets</h2>
-            <p style="margin-bottom:15px; font-size: 0.9rem; color: #888;">Quiz e Flashcards per il consolidamento delle
-                competenze sul topic.</p>
-            <div class="media-grid">
-                <a href="07_QUIZ.md" class="media-link">View Quiz</a>
-                <a href="08_FLASHCARDS.md" class="media-link">Study Flashcards</a>
-            </div>
+        function renderMd(id, targetId) {
+            const src = document.getElementById(id)?.textContent || '';
+            const el = document.getElementById(targetId);
+            if (el) el.innerHTML = marked.parse(src);
+        }
 
-            <h3 style="margin-top:25px; font-size: 1rem; color: var(--secondary);">Raw Data Extract</h3>
-            <div
-                style="max-height: 200px; overflow-y: auto; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px; margin-top: 10px; border: 1px solid var(--glass-border);">
-                <pre style="font-size: 0.75rem;">{{CONTENT_QUIZ_RAW}}</pre>
-            </div>
-        </div>
+        // ── TABS ──
+        function showTab(name) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('panel-' + name)?.classList.add('active');
+            document.getElementById('tab-' + name)?.classList.add('active');
+            document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.sidebar-item').forEach(s => {
+                if (s.getAttribute('onclick')?.includes(name)) s.classList.add('active');
+            });
+        }
 
-        <div class="card">
-            <h2>Media & Artifacts</h2>
-            <p style="font-size: 0.9rem; color: #888;">Download degli asset multimediali generati da NotebookLM.</p>
-            <div class="media-grid">
-                <a href="09_AUDIO_BRIEF.mp3" class="media-link">Audio Brief (.mp3)</a>
-                <a href="10_INFOGRAPHIC.png" class="media-link">Infographic (.png)</a>
-                <a href="11_SLIDE_DECK.pdf" class="media-link">Slide Deck (.pdf)</a>
-            </div>
+        // ── QUIZ ──
+        let quizData = [];
+        function parseQuiz() {
+            const raw = document.getElementById('quiz-raw')?.textContent || '';
+            const blocks = raw.split(/\n(?=\d+[\.\)]|\*\*Q\d)/);
+            quizData = [];
+            blocks.forEach(block => {
+                const lines = block.trim().split('\n').filter(l => l.trim());
+                if (lines.length < 2) return;
+                const q = lines[0].replace(/^\d+[\.\)]\s*|\*\*Q\d+[\.\)]?\*\*\s*/, '').replace(/^\*+|\*+$/g, '').trim();
+                const opts = [], answers = [];
+                lines.slice(1).forEach(l => {
+                    const isCorrect = l.includes('✓') || l.includes('(correct)') || l.includes('[correct]');
+                    const text = l.replace(/^[-*•]\s*|^\w[.)]\s*/, '').replace(/✓|\(correct\)|\[correct\]/g, '').trim();
+                    if (text) { opts.push(text); if (isCorrect) answers.push(opts.length - 1); }
+                });
+                if (q && opts.length >= 2) quizData.push({ q, opts, answers });
+            });
+            renderQuiz();
+        }
+        function renderQuiz() {
+            const container = document.getElementById('quizContainer');
+            if (!quizData.length) { container.innerHTML = '<div style="color:rgba(200,204,214,0.3);font-size:12px;padding:20px;text-align:center;">Nessun quiz trovato nel file.</div>'; return; }
+            container.innerHTML = quizData.map((item, qi) => `
+    <div class="quiz-q" id="quizq-${qi}">
+      <div class="quiz-question">${qi + 1}. ${item.q}</div>
+      <div class="quiz-options">
+        ${item.opts.map((opt, oi) => `
+          <label class="quiz-opt" id="qopt-${qi}-${oi}">
+            <input type="radio" name="q${qi}" value="${oi}" onchange="checkAnswer(${qi},${oi})"> ${opt}
+          </label>`).join('')}
+      </div>
+    </div>`).join('');
+        }
+        function checkAnswer(qi, selected) {
+            const item = quizData[qi];
+            item.opts.forEach((_, oi) => {
+                const el = document.getElementById(`qopt-${qi}-${oi}`);
+                el.classList.remove('correct', 'wrong');
+                if (item.answers.includes(oi)) el.classList.add('correct');
+                else if (oi === selected) el.classList.add('wrong');
+                el.querySelector('input').disabled = true;
+            });
+            checkQuizComplete();
+        }
+        function checkQuizComplete() {
+            const answered = quizData.every((_, qi) => document.querySelector(`input[name="q${qi}"]:checked`));
+            if (answered) {
+                let score = 0;
+                quizData.forEach((_, qi) => {
+                    const sel = document.querySelector(`input[name="q${qi}"]:checked`);
+                    if (sel && quizData[qi].answers.includes(parseInt(sel.value))) score++;
+                });
+                const div = document.createElement('div');
+                div.className = 'quiz-score';
+                div.innerHTML = `Score: ${score} / ${quizData.length}`;
+                document.getElementById('quizContainer').appendChild(div);
+            }
+        }
+        function resetQuiz() { renderQuiz(); }
 
-            <h3 style="margin-top:25px; font-size: 1rem; color: var(--secondary);">Fonti Gold Analyzed</h3>
-            <ul class="sources-list" style="margin-top: 10px;">
-                {{SOURCES_LIST}}
-            </ul>
-        </div>
-    </div>
+        // ── FLASHCARDS ──
+        let cards = [], cardIdx = 0, seen = new Set();
+        function parseFlash() {
+            const raw = document.getElementById('flash-raw')?.textContent || '';
+            cards = [];
+            const lines = raw.split('\n');
+            lines.forEach(l => {
+                const qm = l.match(/^Q:\s*(.+)/i);
+                const am = l.match(/^A:\s*(.+)/i);
+                if (qm) cards.push({ q: qm[1].trim(), a: '' });
+                else if (am && cards.length) cards[cards.length - 1].a = am[1].trim();
+            });
+            if (!cards.length) cards = [{ q: 'Nessuna flashcard trovata.', a: 'Verifica il file 08_FLASHCARDS.md' }];
+            cardIdx = 0;
+            renderCard();
+            renderDots();
+        }
+        function renderCard() {
+            document.getElementById('flashQ').textContent = cards[cardIdx]?.q || '—';
+            document.getElementById('flashA').textContent = cards[cardIdx]?.a || '—';
+            document.getElementById('flashcard').classList.remove('flipped');
+            document.getElementById('flashCounter').textContent = `${cardIdx + 1} / ${cards.length}`;
+            seen.add(cardIdx);
+            renderDots();
+        }
+        function renderDots() {
+            const dots = document.getElementById('flashDots');
+            dots.innerHTML = cards.map((_, i) => `<div class="flash-dot ${i === cardIdx ? 'active' : seen.has(i) ? 'seen' : ''}"></div>`).join('');
+        }
+        function flipCard() { document.getElementById('flashcard').classList.toggle('flipped'); }
+        function nextCard() { cardIdx = (cardIdx + 1) % cards.length; renderCard(); }
+        function prevCard() { cardIdx = (cardIdx - 1 + cards.length) % cards.length; renderCard(); }
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowRight') nextCard();
+            if (e.key === 'ArrowLeft') prevCard();
+            if (e.key === ' ') { e.preventDefault(); flipCard(); }
+        });
 
-    <div class="footer">
-        Generated by AntiGravity x The Spatial Wave — Pipeline v2.0<br>
-        Notebook ID: <a href="{{NOTEBOOK_URL}}" style="color:#888">{{NOTEBOOK_ID}}</a><br>
-        Files: {{FILE_COUNT}} | Total Size: {{TOTAL_SIZE}}
-    </div>
+        // ── AUDIO ──
+        function toggleAudio() {
+            const audio = document.getElementById('audioEl');
+            const btn = document.getElementById('playBtn');
+            const bars = document.querySelectorAll('.audio-bar');
+            if (audio.paused) {
+                audio.play();
+                btn.textContent = '⏸';
+                bars.forEach(b => b.classList.add('playing'));
+            } else {
+                audio.pause();
+                btn.textContent = '▶';
+                bars.forEach(b => b.classList.remove('playing'));
+            }
+        }
+        function stopAudio() {
+            document.getElementById('playBtn').textContent = '▶';
+            document.querySelectorAll('.audio-bar').forEach(b => b.classList.remove('playing'));
+        }
+
+        // ── DOWNLOAD ──
+        function downloadFile(filename) {
+            const a = document.createElement('a');
+            a.href = filename; a.download = filename; a.click();
+        }
+
+        // ── INIT ──
+        window.addEventListener('DOMContentLoaded', () => {
+            renderMd('md-brief', 'briefBody');
+            renderMd('md-doc', 'docBody');
+            renderMd('md-script', 'scriptBody');
+            renderMd('md-checklist', 'checklistBody');
+            parseQuiz();
+            parseFlash();
+        });
+    </script>
 </body>
 
 </html>
