@@ -1,7 +1,7 @@
 ---
 name: thespatialwave-system-os
-version: 2.3.0-CLEAN
-description: The Spatial Wave — Pipeline completa NotebookLM + AntiGravity. Da topic o notebook esistente genera documenti markdown, audio, infografica, quiz, flashcards, slide deck e dashboard HTML offline-ready (Lyra palette). Tutto in locale, tutto dalla chat.
+version: 2.5.0-CLEAN
+description: The Spatial Wave — Pipeline completa NotebookLM + AntiGravity. Da topic o notebook esistente genera documenti markdown, audio, infografica, quiz, flashcards, slide deck e dashboard HTML offline-ready. Self-healing nativo + assemblaggio HTML autonomo.
 author: The Spatial Wave
 triggers:
   - "lancia pipeline TSW"
@@ -18,7 +18,7 @@ requires:
   - notebooklm autenticato
 ---
 
-# THE SPATIAL WAVE — SYSTEM OS v2.0
+# THE SPATIAL WAVE — SYSTEM OS v2.5.0
 ## Skill per AntiGravity — Pipeline NotebookLM completa
 
 ---
@@ -26,6 +26,20 @@ requires:
 ## ISTRUZIONI PER L'AGENTE
 
 Quando l'utente ti attiva con uno dei trigger, esegui questa procedura SENZA chiedere conferma ad ogni step. Chiedi solo le informazioni mancanti all'inizio, poi esegui tutto in autonomia.
+
+---
+
+## REGOLA DI SELF-HEALING — OBBLIGATORIA PER OGNI FILE MD GENERATO
+
+> **Dopo ogni `notebooklm ask` che genera un file `.md`, prima di procedere al passo successivo:**
+>
+> 1. Leggi il file appena creato
+> 2. Controlla se contiene righe che iniziano con: `Conversation:`, `Resumed`, `Continuing conversation`, `Answer:`, oppure blocchi che iniziano con un backtick isolato seguito da `**3.` o `**Step`
+> 3. Se trovi queste righe/blocchi — rimuovili e riscrivi il file pulito
+> 4. Verifica che il file risultante abbia contenuto significativo (almeno 200 caratteri)
+> 5. Solo dopo la validazione, procedi al passo successivo
+>
+> **Questo è il tuo controllo qualità. Non delegarlo a script esterni.**
 
 ---
 
@@ -37,8 +51,8 @@ Chiedi all'utente (in un'unica domanda):
 > 1. MODE: CONTENT_PACK / MARKETING_INTEL / MEETING_PREP
 > 2. TOPIC o NOTEBOOK ESISTENTE (se hai già un notebook, dammi l'ID o il nome)
 > 3. Cosa vuoi generare: TUTTO / solo documenti / solo media (audio, infografica, slide)
-> 4. Note aggiuntive (opzionale): tono, industry, competitor, piattaforma target
-"
+> 4. Note aggiuntive (opzionale): tono, industry, competitor, piattaforma target"
+
 Poi imposta queste variabili:
 - `MODE` = CONTENT_PACK | MARKETING_INTEL | MEETING_PREP
 - `TOPIC` = stringa topic
@@ -47,24 +61,22 @@ Poi imposta queste variabili:
 - `RUN_FOLDER` = `C:\Users\admin\Dev\ai-skill-notebook-knowledge\TSW-[MODE]-[TOPIC_SAFE]`
   dove `TOPIC_SAFE` = topic senza spazi e caratteri speciali (es. "Lyra-Hub", "XR-Reset")
   **⚠️ Mai usare spazi, parentesi [ ] o trattini nel percorso cartella — causano errori PowerShell**
-  ```bash
-  # Esempio calcolo TOPIC_SAFE in PowerShell:
-  $TOPIC_SAFE = "Lyra Hub — positioning e funnel" -replace "[^a-zA-Z0-9]", "-" -replace "-+", "-"
-  $RUN_FOLDER = "C:\Users\admin\Dev\ai-skill-notebook-knowledge\TSW-CONTENT_PACK-$TOPIC_SAFE"
-  ```
+
+```powershell
+$TOPIC_SAFE = "Lyra Hub — positioning e funnel" -replace "[^a-zA-Z0-9]", "-" -replace "-+", "-"
+$RUN_FOLDER = "C:\Users\admin\Dev\ai-skill-notebook-knowledge\TSW-CONTENT_PACK-$TOPIC_SAFE"
+```
 
 ---
 
 ## STEP 1 — VERIFICA PREREQUISITI
 
-Prima di tutto verifica che il CLI sia disponibile:
-
-```bash
+```powershell
 notebooklm --version
 ```
 
 Se fallisce:
-```bash
+```powershell
 $env:PATH += ";C:\Users\admin\AppData\Roaming\Python\Python313\Scripts"
 notebooklm --version
 ```
@@ -77,7 +89,7 @@ Se ancora fallisce: avvisa l'utente e fermati.
 
 ### CASO A — Notebook esistente (NOTEBOOK_ID fornito):
 
-```bash
+```powershell
 notebooklm use [NOTEBOOK_ID]
 notebooklm status
 notebooklm source list
@@ -137,11 +149,9 @@ Usa web search per trovare 10-25 fonti su `[TOPIC]`:
 - Community: Reddit, forum, Discord, Skool, Facebook Groups
 - Competitor (corsi, tool, community) — soprattutto se MODE=MARKETING_INTEL
 
-**⚠️ IMPORTANTE:** Cerca SOLO fonti pertinenti al topic esatto.
-Se i primi risultati non corrispondono al topic (es. trovano un'azienda omonima), fermati e tratta il topic come brand personale → vai a Step 0.0.
+**⚠️ IMPORTANTE:** Se i primi risultati non corrispondono al topic, fermati e tratta il topic come brand personale → vai a Step 0.0.
 
-Crea cartella e file discovery:
-```bash
+```powershell
 mkdir "[RUN_FOLDER]"
 mkdir "[RUN_FOLDER]\sources"
 ```
@@ -155,29 +165,26 @@ Scrivi `[RUN_FOLDER]\sources\urls.txt` con 3-12 "gold URL" (uno per riga).
 
 ### Step 0.2 — Seed Profile
 
-Crea cartella se non esiste:
-```bash
+```powershell
 mkdir "[RUN_FOLDER]"
 mkdir "[RUN_FOLDER]\sources"
 ```
 
 Sintetizza tutto in `[RUN_FOLDER]\00_SEED_PROFILE.md` (max 2 pagine):
 - Obiettivo della run
-- Target utente REALE + livello (basato su materiali utente, non ipotesi generiche)
-- Pain point principali (con evidenze — citazioni da materiali utente o da fonti web)
+- Target utente REALE + livello
+- Pain point principali (con evidenze)
 - Lista fonti gold (max 12 URL) — OPPURE testo seed se brand personale
 - Artifact da generare (checklist)
 - Competitor lista breve (se MODE=MARKETING_INTEL)
 - Note speciali dall'utente
-- Tono e voice del brand (es. "Lyra: calmo, architettonico, autorevole")
-
-Questo file è la fonte text primaria per NotebookLM.
+- Tono e voice del brand
 
 ---
 
-### Step 0.2 — Website Scrape & Enrichment Avanzato (solo MEETING_PREP o MARKETING_INTEL competitor)
+### Step 0.2b — Website Scrape & Enrichment Avanzato (solo MEETING_PREP o MARKETING_INTEL competitor)
 
-Se MODE=MEETING_PREP o si analizza un competitor corporate, cerca:
+Se MODE=MEETING_PREP o si analizza un competitor corporate, cerca proattivamente:
 - Sito ufficiale: About, Product/Service, Pricing, Team, Press, Careers
 - LinkedIn company page (employee count, post recenti, hiring activity)
 - Crunchbase / PitchBook (funding rounds, investors, valuation)
@@ -192,18 +199,13 @@ Output: aggiungi URL trovati a `sources/urls.txt` e annota in `00_DISCOVERY_SOUR
 
 ## Phase 1 — Creazione Notebook
 
-```bash
-# Crea notebook
+```powershell
 notebooklm create "TSW - [MODE] - [TOPIC]"
-
-# Attiva il nuovo notebook (usa l'ID restituito)
 notebooklm use [NUOVO_ID]
 
-# Aggiungi seed profile come fonte text (PowerShell)
 $seedText = Get-Content -LiteralPath "$RUN_FOLDER\00_SEED_PROFILE.md" -Raw -Encoding utf8
 notebooklm source add --text $seedText --title "TSW SEED PROFILE - $TOPIC" --wait
 
-# Aggiungi gold URLs (uno alla volta, con --wait)
 $urls = Get-Content -LiteralPath "$RUN_FOLDER\sources\urls.txt" | Where-Object { $_.Trim() -ne "" }
 foreach ($url in $urls) {
     notebooklm source add $url.Trim() --wait
@@ -215,65 +217,69 @@ foreach ($url in $urls) {
 
 ## Phase 2 — Deep Research
 
-```bash
-# Avvia deep research
+```powershell
 # Per topic PUBBLICI:
 notebooklm source add-research "$TOPIC best practices tutorial errori comuni competitor community pain points 2025 2026" --mode deep --no-wait
 
-# Per BRAND PERSONALI (Lyra Hub, XR Reset, ecc.) — cerca sul mercato, NON sul brand:
-# notebooklm source add-research "immersive web XR content factory creator italiano community Skool 2025 2026" --mode deep --no-wait
-# ⚠️ Sostituisci la query con il settore/mercato del brand, mai con il nome del brand stesso
+# Per BRAND PERSONALI — cerca il MERCATO, mai il nome del brand:
+# notebooklm source add-research "[SETTORE DEL BRAND] creator italiano community Skool 2025 2026" --mode deep --no-wait
 
-# Aspetta completamento
 notebooklm research wait
 ```
 
-### Import batch (CRITICO — mai importare tutto insieme):
-
-```bash
-# Controlla quante fonti ha trovato
-notebooklm source list
-
-# Importa in batch da 20 — attendi 3 secondi tra batch
-# (notebooklm source add-research gestisce questo automaticamente se usi --wait)
-```
+**⚠️ Mai importare 100+ fonti in un colpo — batch da 20 massimo**
 
 ---
 
 ## Phase 3 — Generazione Documenti
 
-Crea la cartella run se non esiste:
-```bash
+```powershell
 mkdir "[RUN_FOLDER]"
 ```
 
 ### 3.1 — Master Brief
 
-```bash
+```powershell
 notebooklm ask "Scrivi un MASTER BRIEF completo in italiano con queste sezioni: 1) Obiettivo (1 riga), 2) Target (chi è, livello, pain point principali con evidenze dalle fonti), 3) Promessa (cosa ottiene), 4) Differenziatori (rispetto ai competitor), 5) Struttura contenuti consigliata, 6) CTA principale, 7) KPI da monitorare. Stile chiaro, operativo, senza fluff." > "[RUN_FOLDER]\01_MASTER_BRIEF.md"
 ```
 
+> **SELF-HEALING:** Leggi `01_MASTER_BRIEF.md`. Rimuovi eventuali righe `Conversation:`, `Resumed`, `Continuing conversation`, `Answer:` e blocchi backtick orfani. Verifica che il file contenga almeno 200 caratteri di contenuto reale. Se è vuoto o corrotto, rigenera.
+
+---
+
 ### 3.2 — Main Document
 
-```bash
+```powershell
 notebooklm ask "Scrivi il documento principale in italiano, struttura step-by-step: Perché (1 riga), Prerequisiti, Passaggi numerati con istruzioni precise, Errori comuni da evitare, Check finale, Risultato atteso. Se il topic è tecnico includi comandi in blocchi code. Scrivi in modo che un principiante possa seguire." > "[RUN_FOLDER]\02_MAIN_DOC.md"
 ```
 
+> **SELF-HEALING:** Leggi `02_MAIN_DOC.md`. Rimuovi pollution CLI. Verifica contenuto minimo 200 caratteri.
+
+---
+
 ### 3.3 — Script Lyra
 
-```bash
+```powershell
 notebooklm ask "Scrivi lo script completo per la voce Lyra in italiano. Tono: autorevole, calmo, architettonico. Niente puntini di sospensione, niente commenti meta tipo 'ora parliamo di...'. Deve spiegare il contenuto del documento principale come se stessi insegnando a voce a qualcuno di intelligente. Fluente e naturale." > "[RUN_FOLDER]\03_SCRIPT_LYRA.md"
 ```
 
+> **SELF-HEALING:** Leggi `03_SCRIPT_LYRA.md`. Rimuovi pollution CLI. Verifica contenuto minimo 200 caratteri.
+
+---
+
 ### 3.4 — Checklist
 
-```bash
+```powershell
 notebooklm ask "Genera una checklist operativa in italiano con: task specifico, tempo stimato, output richiesto, check di verifica. Segui l'ordine logico del MAIN_DOC. Aggiungi step 'carica screenshot + 3 righe nel Lab' dove appropriato." > "[RUN_FOLDER]\04_CHECKLIST.md"
 ```
 
-### 3.5 — Solo se MODE=MEETING_PREP:
+> **SELF-HEALING:** Leggi `04_CHECKLIST.md`. Rimuovi pollution CLI. Verifica contenuto minimo 200 caratteri.
 
-```bash
+---
+
+### 3.5 — Solo se MODE=MEETING_PREP
+
+```powershell
 notebooklm ask "Scrivi un briefing pre-meeting completo in italiano: 1) Company Overview (background, dimensioni, leadership, business model), 2) Landscape Competitivo, 3) Opportunità di Mercato (dati e cifre specifiche), 4) Key Talking Points (numerati, azionabili), 5) Gestione Obiezioni (tabella Obiezione/Risposta), 6) Next Steps consigliati." > "$RUN_FOLDER\05_MEETING_BRIEF.md"
 
 notebooklm ask "Crea schede bio per i partecipanti al meeting: Nome, Ruolo, Background, Interessi professionali, Come approcciarli. Basati sulle fonti LinkedIn/web trovate." > "$RUN_FOLDER\06_PARTICIPANT_BIOS.md"
@@ -283,17 +289,18 @@ notebooklm ask "Analisi trimestrale: performance recente dell'azienda, KPI pubbl
 notebooklm ask "Mappa dei potenziali punti di frizione: cosa potrebbe bloccare la collaborazione, obiezioni probabili, aree di disaccordo e come gestirle proattivamente." > "$RUN_FOLDER\08_FRICTION_MAP.md"
 ```
 
-### 3.6 — Solo se MODE=MARKETING_INTEL:
+> **SELF-HEALING:** Leggi ognuno dei 4 file appena generati. Rimuovi pollution CLI da ciascuno. Verifica che nessuno sia vuoto o corrotto.
 
-```bash
+---
+
+### 3.6 — Solo se MODE=MARKETING_INTEL
+
+```powershell
 notebooklm ask "Crea una mappa competitor con tabella: Nome, Posizionamento, Punti di forza, Punti deboli, Nostro vantaggio differenziale." > "[RUN_FOLDER]\05_MARKET_MAP.md"
 
 notebooklm ask "Crea 2-4 personas target con: Nome, Età, Ruolo, Pain point principale (con citazione da fonti), Obiettivo, Obiezione tipica, Come raggiungerlo." > "[RUN_FOLDER]\06_TARGET_PERSONAS.md"
 
 notebooklm ask "Tabella pain point → evidenza trovata nelle fonti → implicazione strategica per noi. Almeno 8 righe." > "[RUN_FOLDER]\07_PAINPOINTS_EVIDENCE.md"
-
-# NOTA: in MARKETING_INTEL i file 09-11 sono riservati ai documenti strategici
-# Gli artifact media usano 12-16 per evitare conflitti
 
 notebooklm ask "Scrivi UVP (Unique Value Proposition), reason-to-believe con 3 prove concrete, positioning statement. Poi tagline breve (max 8 parole)." > "[RUN_FOLDER]\08_OFFER_POSITIONING.md"
 
@@ -304,21 +311,16 @@ notebooklm ask "10 angoli ads con: Angolo, Headline principale, Hook per video/r
 notebooklm ask "Content calendar 4 settimane: data, piattaforma, tipo contenuto, topic specifico, CTA, note produzione. Formato tabella." > "[RUN_FOLDER]\11_CONTENT_CALENDAR.md"
 ```
 
----
+> **SELF-HEALING:** Leggi ognuno dei 7 file appena generati. Rimuovi pollution CLI da ciascuno. Verifica che nessuno sia vuoto o corrotto.
 
+---
 
 ## Phase 4 — Artifact Media
 
 ### ⚠️ ORDINE CRITICO per MARKETING_INTEL
-Se MODE=MARKETING_INTEL, verifica che i file 05-11 siano stati generati in Phase 3.6 PRIMA di avviare gli artifact media. Gli artifact usano numeri 12-16 per evitare conflitti. Controlla:
-```bash
-Test-Path "$RUN_FOLDER\11_CONTENT_CALENDAR.md"
-# Se False → torna a Phase 3.6 e genera i file mancanti
-```
+Se MODE=MARKETING_INTEL, verifica che `11_CONTENT_CALENDAR.md` esista prima di procedere. Gli artifact usano prefissi 12-16 per evitare conflitti con i documenti strategici.
 
-Avvia in background senza aspettare:
-
-```bash
+```powershell
 notebooklm generate audio --no-wait
 notebooklm generate infographic --orientation portrait --detail-level detailed --no-wait
 notebooklm generate quiz --difficulty medium --question-count 8 --no-wait
@@ -333,22 +335,21 @@ notebooklm generate slide-deck --format detailed_deck --no-wait
 # mcp: studio_create → artifact_type: "slide_deck", slide_format: "detailed_deck"
 ```
 
-Aspetta completamento:
-```bash
+Aspetta completamento (ripeti ogni 2 min):
+```powershell
 notebooklm artifact list
-# Ripeti ogni 2 minuti finché tutti sono completed
 ```
 
 Scarica quando pronti:
-```bash
-# Se MODE=CONTENT_PACK o MEETING_PREP:
+```powershell
+# CONTENT_PACK / MEETING_PREP:
 notebooklm download quiz "[RUN_FOLDER]\07_QUIZ.md"
 notebooklm download flashcards "[RUN_FOLDER]\08_FLASHCARDS.md"
 notebooklm download audio "[RUN_FOLDER]\09_AUDIO_BRIEF.mp3"
 notebooklm download infographic "[RUN_FOLDER]\10_INFOGRAPHIC.png"
 notebooklm download slide-deck "[RUN_FOLDER]\11_SLIDE_DECK.pdf"
 
-# Se MODE=MARKETING_INTEL (numeri 12-16 per evitare conflitto con docs strategici):
+# MARKETING_INTEL (numeri 12-16 per evitare conflitto con docs strategici):
 notebooklm download quiz "[RUN_FOLDER]\12_QUIZ.md"
 notebooklm download flashcards "[RUN_FOLDER]\13_FLASHCARDS.md"
 notebooklm download audio "[RUN_FOLDER]\14_AUDIO_BRIEF.mp3"
@@ -356,64 +357,67 @@ notebooklm download infographic "[RUN_FOLDER]\15_INFOGRAPHIC.png"
 notebooklm download slide-deck "[RUN_FOLDER]\16_SLIDE_DECK.pdf"
 ```
 
-**Fallback flashcards** — se il file ha meno di 8 Q&A:
-```bash
-# CONTENT_PACK/MEETING_PREP:
-notebooklm ask "Genera 10 flashcard Q&A in italiano sul topic [TOPIC]. Formato esatto: Q: [domanda] / A: [risposta]. Una per riga." >> "[RUN_FOLDER]\08_FLASHCARDS.md"
-# MARKETING_INTEL:
-notebooklm ask "Genera 10 flashcard Q&A in italiano sul topic [TOPIC]. Formato esatto: Q: [domanda] / A: [risposta]. Una per riga." >> "[RUN_FOLDER]\13_FLASHCARDS.md"
-```
+> **SELF-HEALING Flashcards:** Apri il file flashcards scaricato. Conta le coppie Q:/A:. Se sono meno di 8, rigenera:
+> ```powershell
+> notebooklm ask "Genera 10 flashcard Q&A in italiano sul topic [TOPIC]. Formato esatto: Q: [domanda] / A: [risposta]. Una per riga." >> "[RUN_FOLDER]\08_FLASHCARDS.md"
+> ```
+> Poi leggi il file risultante, rimuovi pollution CLI, verifica che ci siano almeno 8 coppie Q:/A: valide.
 
 ---
 
-## Phase 5 — Dashboard HTML
+## Phase 5 — Dashboard HTML (Assemblaggio Autonomo)
 
-### Stack tecnologico del template (NON modificare)
-Il `dashboard_template.html` usa già:
-- **Marked.js** via CDN — per rendering dinamico Markdown nelle tab
-- **Font Awesome 6** — icone
-- **Orbitron + Manrope** — font Lyra palette
-- **Quiz interattivo** — feedback verde/rosso on-click
-- **Flashcards flip 3D** — CSS perspective + rotateY(180deg)
-- **Audio player** — con visualizer animato
+### ⚠️ REGOLE ASSOLUTE — NON NEGOZIABILI
 
-⚠️ NON aggiungere librerie esterne. NON modificare la struttura HTML.
-Il tuo unico compito in Phase 5 è sostituire i placeholder con il contenuto reale.
+1. **NON creare mai un nuovo file HTML da zero.**
+2. **USA SEMPRE e SOLO il template:** `C:\Users\admin\Dev\NotebookLM-Skill-Extension-CLEAN\templates\dashboard_template.html`
+3. **NON usare PowerShell per leggere e iniettare i file MD** — usa le tue capacità native (Python in memoria o file editing diretto) per evitare problemi di encoding e regex fragili.
 
-### ⚠️ REGOLA ASSOLUTA — NON NEGOZIABILE
-**NON creare mai un nuovo file HTML da zero.**
-**NON usare un template diverso.**
-**USA SEMPRE e SOLO il file:**
-`C:\Users\admin\Dev\NotebookLM-Skill-Extension-CLEAN\templates\dashboard_template.html`
+Se il template non esiste, fermati e avvisa l'utente.
 
-Se il file non esiste, fermati e avvisa l'utente. Non procedere.
+### Procedura Autonoma (metodo preferito):
 
-### Procedura obbligatoria:
+1. **Leggi in memoria** il contenuto di `dashboard_template.html`
+2. **Leggi i file `.md` già puliti** da Phase 3 (encoding UTF-8 rigoroso):
+   - `01_MASTER_BRIEF.md`, `02_MAIN_DOC.md`, `03_SCRIPT_LYRA.md`, `04_CHECKLIST.md`
+   - `07_QUIZ.md`, `08_FLASHCARDS.md` (o 12/13 per MARKETING_INTEL)
+3. **Esegui un'ultima passata di pulizia in memoria** su ogni variabile letta: rimuovi qualsiasi occorrenza di `Conversation:`, `Resumed`, `Continuing conversation`, `Answer:`
+4. **Sostituisci i placeholder nel template:**
+   - `{{TOPIC}}` → topic corrente
+   - `{{MODE}}` → MODE corrente
+   - `{{DATE}}` → data odierna dd/MM/yyyy
+   - `{{NOTEBOOK_ID}}` → ID notebook
+   - `{{NOTEBOOK_URL}}` → `https://notebooklm.google.com/notebook/[NOTEBOOK_ID]`
+   - `{{PRIORITY_PLATFORM}}` → piattaforma prioritaria (default: Instagram)
+   - `{{CONTENT_BRIEF}}` → contenuto `01_MASTER_BRIEF.md`
+   - `{{CONTENT_DOC}}` → contenuto `02_MAIN_DOC.md`
+   - `{{CONTENT_SCRIPT}}` → contenuto `03_SCRIPT_LYRA.md`
+   - `{{CONTENT_CHECKLIST}}` → contenuto `04_CHECKLIST.md`
+   - `{{CONTENT_QUIZ_RAW}}` → contenuto quiz `.md`
+   - `{{CONTENT_FLASHCARDS_RAW}}` → contenuto flashcards `.md`
+5. **Genera `{{SOURCES_LIST}}`:** leggi `sources/urls.txt`, costruisci HTML lista con `<div class='source-item'>` per ogni URL
+6. **Calcola `{{FILE_COUNT}}`** (numero file nella cartella) e **`{{TOTAL_SIZE}}`** (dimensione totale in MB)
+7. **Salva** il file compilato in `[RUN_FOLDER]\index.html` — encoding rigorosamente UTF-8
+8. **Verifica finale:** `index.html` deve esistere e pesare più di 50 KB. Se pesa meno, ripeti dall'inizio di Phase 5.
 
-**Step 1 — Leggi il template:**
-```bash
-$template = Get-Content -LiteralPath "C:\Users\admin\Dev\NotebookLM-Skill-Extension-CLEAN\templates\dashboard_template.html" -Raw -Encoding utf8
-```
+### Fallback PowerShell (solo se il metodo autonomo fallisce):
 
-**Step 2 — Leggi tutti i file MD:**
-```bash
-$brief      = Get-Content -LiteralPath "[RUN_FOLDER]\01_MASTER_BRIEF.md" -Raw -Encoding utf8
-$doc        = Get-Content -LiteralPath "[RUN_FOLDER]\02_MAIN_DOC.md" -Raw -Encoding utf8
-$script     = Get-Content -LiteralPath "[RUN_FOLDER]\03_SCRIPT_LYRA.md" -Raw -Encoding utf8
-$checklist  = Get-Content -LiteralPath "[RUN_FOLDER]\04_CHECKLIST.md" -Raw -Encoding utf8
-$quiz       = Get-Content -LiteralPath "[RUN_FOLDER]\07_QUIZ.md" -Raw -Encoding utf8
-$flashcards = Get-Content -LiteralPath "[RUN_FOLDER]\08_FLASHCARDS.md" -Raw -Encoding utf8
-$sources    = Get-Content -LiteralPath "[RUN_FOLDER]\sources\urls.txt" -Raw -Encoding utf8
-```
+```powershell
+$template = [System.IO.File]::ReadAllText("C:\Users\admin\Dev\NotebookLM-Skill-Extension-CLEAN\templates\dashboard_template.html", [System.Text.Encoding]::UTF8)
+$brief      = [System.IO.File]::ReadAllText("$RUN_FOLDER\01_MASTER_BRIEF.md", [System.Text.Encoding]::UTF8)
+$doc        = [System.IO.File]::ReadAllText("$RUN_FOLDER\02_MAIN_DOC.md", [System.Text.Encoding]::UTF8)
+$script     = [System.IO.File]::ReadAllText("$RUN_FOLDER\03_SCRIPT_LYRA.md", [System.Text.Encoding]::UTF8)
+$checklist  = [System.IO.File]::ReadAllText("$RUN_FOLDER\04_CHECKLIST.md", [System.Text.Encoding]::UTF8)
+$quiz       = [System.IO.File]::ReadAllText("$RUN_FOLDER\07_QUIZ.md", [System.Text.Encoding]::UTF8)
+$flashcards = [System.IO.File]::ReadAllText("$RUN_FOLDER\08_FLASHCARDS.md", [System.Text.Encoding]::UTF8)
 
-**Step 3 — Sostituisci i placeholder nel template:**
-```bash
 $html = $template
 $html = $html.Replace("{{TOPIC}}", $TOPIC)
 $html = $html.Replace("{{MODE}}", $MODE)
 $html = $html.Replace("{{DATE}}", (Get-Date -Format "dd/MM/yyyy"))
 $html = $html.Replace("{{NOTEBOOK_ID}}", $NOTEBOOK_ID)
 $html = $html.Replace("{{NOTEBOOK_URL}}", "https://notebooklm.google.com/notebook/$NOTEBOOK_ID")
+$html = $html.Replace("{{PRIORITY_PLATFORM}}", $PRIORITY_PLATFORM)
 $html = $html.Replace("{{CONTENT_BRIEF}}", $brief)
 $html = $html.Replace("{{CONTENT_DOC}}", $doc)
 $html = $html.Replace("{{CONTENT_SCRIPT}}", $script)
@@ -421,38 +425,24 @@ $html = $html.Replace("{{CONTENT_CHECKLIST}}", $checklist)
 $html = $html.Replace("{{CONTENT_QUIZ_RAW}}", $quiz)
 $html = $html.Replace("{{CONTENT_FLASHCARDS_RAW}}", $flashcards)
 
-# FIX 4 — FILE_COUNT calcolato dinamicamente
+$sourceLines = (Get-Content -LiteralPath "$RUN_FOLDER\sources\urls.txt") | Where-Object { $_.Trim() -ne "" }
+$i = 0
+$sourcesHtml = ($sourceLines | ForEach-Object { $i++; "<div class='source-item'><div class='source-num'>$i</div><a href='$($_.Trim())' target='_blank' class='source-url'>$($_.Trim())</a></div>" }) -join "`n"
+$html = $html.Replace("{{SOURCES_LIST}}", $sourcesHtml)
+
 $fileCount = (Get-ChildItem -LiteralPath $RUN_FOLDER -File | Measure-Object).Count
-$totalSize = "{0:N0} MB" -f ((Get-ChildItem -LiteralPath $RUN_FOLDER -Recurse -File | Measure-Object -Property Length -Sum).Sum / 1MB)
+$totalSize = "{0:N1} MB" -f ((Get-ChildItem -LiteralPath $RUN_FOLDER -Recurse -File | Measure-Object -Property Length -Sum).Sum / 1MB)
 $html = $html.Replace("{{FILE_COUNT}}", $fileCount.ToString())
 $html = $html.Replace("{{TOTAL_SIZE}}", "~$totalSize")
-```
 
-**Step 4 — Genera lista fonti HTML:**
-```bash
-$sourceLines = $sources -split "`n" | Where-Object { $_.Trim() -ne "" }
-$sourcesHtml = ($sourceLines | ForEach-Object -Begin {$i=0} -Process {
-  $i++
-  "<div class='source-item'><div class='source-num'>$i</div><a href='$($_.Trim())' target='_blank' class='source-url'>$($_.Trim())</a></div>"
-}) -join "`n"
-$html = $html.Replace("{{SOURCES_LIST}}", $sourcesHtml)
-```
+[System.IO.File]::WriteAllText("$RUN_FOLDER\index.html", $html, [System.Text.Encoding]::UTF8)
 
-**Step 5 — Salva:**
-```bash
-$html | Out-File -LiteralPath "[RUN_FOLDER]\index.html" -Encoding utf8
-```
-
-**Step 6 — Verifica:**
-```bash
-# Controlla che il file esista e abbia dimensione > 50KB
-$size = (Get-Item -LiteralPath "[RUN_FOLDER]\index.html").Length
+$size = (Get-Item -LiteralPath "$RUN_FOLDER\index.html").Length
 if ($size -lt 50000) { Write-Host "ERRORE: index.html troppo piccolo ($size bytes) — ripeti Phase 5" }
 else { Write-Host "OK: index.html generato ($size bytes)" }
 ```
 
 ---
-
 
 ## Phase 6 — Index File
 
@@ -480,9 +470,10 @@ Crea `[RUN_FOLDER]\00_INDEX.md`:
 
 - Se infografica fallisce → continua, segna "PENDING" nell'index
 - Se audio > 10 min → segna "GENERATING" e continua
-- Se flashcards < 8 Q&A → usa fallback query
+- Se flashcards < 8 Q&A → usa fallback query (vedi Phase 4 Self-Healing)
 - La dashboard deve funzionare anche senza i file media
 - Mai bloccarsi su un singolo step
+- Se AntiGravity va in crash → cambia modello (es. Gemini Pro High) e riprendi dall'ultimo step completato
 
 ---
 
@@ -493,6 +484,8 @@ Crea `[RUN_FOLDER]\00_INDEX.md`:
 3. Notebook isolato per ogni run
 4. Output sempre in italiano salvo diversa indicazione
 5. Chiedi i parametri UNA VOLTA all'inizio — poi esegui tutto da solo
+6. **Self-healing obbligatorio dopo ogni file MD generato** — non saltare mai questo step
+7. **Phase 5: metodo autonomo sempre preferito** — PowerShell solo come fallback
 
 ---
 
@@ -520,9 +513,6 @@ TSW - [MODE] - [TOPIC]/
 ├── 06_PARTICIPANT_BIOS.md
 ├── 07_QUARTERLY_INTEL.md
 ├── 08_FRICTION_MAP.md
-├── 09_AUDIO_BRIEF.mp3
-├── 10_INFOGRAPHIC.png
-├── 11_SLIDE_DECK.pdf
 │
 │   ── MARKETING_INTEL (aggiuntivi):
 ├── 05_MARKET_MAP.md
@@ -532,11 +522,8 @@ TSW - [MODE] - [TOPIC]/
 ├── 09_FUNNEL_BLUEPRINT.md
 ├── 10_ADS_ANGLES.md
 ├── 11_CONTENT_CALENDAR.md
-├── 12_QUIZ.md
-├── 13_FLASHCARDS.md
-├── 14_AUDIO_BRIEF.mp3
-├── 15_INFOGRAPHIC.png
-├── 16_SLIDE_DECK.pdf
+├── 12_QUIZ.md → 16_SLIDE_DECK.pdf
+│
 ├── index.html                   ← dashboard offline-ready
 └── sources/
     └── urls.txt
