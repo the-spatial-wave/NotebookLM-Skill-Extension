@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TSW Dashboard &mdash; {{TOPIC}}</title>
+    <title>TSW Dashboard — {{TOPIC}}</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Orbitron:wght@400;600;700&display=swap"
         rel="stylesheet">
@@ -24,7 +24,7 @@
             --glass-border: rgba(255, 255, 255, 0.08);
             --grad-main: linear-gradient(135deg, #00E5FF, #FF2FD6);
             --grad-deep: radial-gradient(circle at 30% 50%, rgba(0, 229, 255, 0.06), #080C12 70%);
-            --sidebar-w: 290px;
+            --sidebar-w: 300px;
         }
 
         * {
@@ -42,25 +42,26 @@
         }
 
         ::-webkit-scrollbar {
-            width: 5px;
+            width: 5px
         }
 
         ::-webkit-scrollbar-track {
-            background: transparent;
+            background: transparent
         }
 
         ::-webkit-scrollbar-thumb {
             background: rgba(0, 229, 255, 0.2);
-            border-radius: 3px;
+            border-radius: 3px
         }
 
+        /* HEADER */
         .header {
-            padding: 15px 28px;
+            padding: 14px 28px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid var(--glass-border);
-            background: rgba(8, 12, 18, 0.96);
+            border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+            background: rgba(8, 12, 18, 0.97);
             backdrop-filter: blur(24px);
             position: sticky;
             top: 0;
@@ -94,15 +95,15 @@
             flex-shrink: 0;
         }
 
-        .btn-ghost {
-            background: transparent;
-            border: 1px solid rgba(0, 229, 255, 0.2);
+        .btn-nb {
+            background: rgba(0, 229, 255, 0.08);
+            border: 1px solid rgba(0, 229, 255, 0.25);
             color: var(--cyan);
-            padding: 6px 14px;
-            border-radius: 7px;
+            padding: 7px 16px;
+            border-radius: 8px;
             font-family: 'Manrope', sans-serif;
             font-size: 11px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.15s;
             white-space: nowrap;
@@ -112,17 +113,17 @@
             gap: 6px;
         }
 
-        .btn-ghost:hover {
-            background: rgba(0, 229, 255, 0.06);
-            border-color: rgba(0, 229, 255, 0.4);
+        .btn-nb:hover {
+            background: rgba(0, 229, 255, 0.14);
+            border-color: rgba(0, 229, 255, 0.5);
         }
 
-        .btn-export {
+        .btn-pdf-header {
             background: var(--grad-main);
             border: none;
             color: #080C12;
-            padding: 6px 16px;
-            border-radius: 7px;
+            padding: 7px 18px;
+            border-radius: 8px;
             font-family: 'Manrope', sans-serif;
             font-size: 11px;
             font-weight: 800;
@@ -132,22 +133,25 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
+            letter-spacing: 0.5px;
         }
 
-        .btn-export:hover {
+        .btn-pdf-header:hover {
             opacity: 0.85;
         }
 
+        /* LAYOUT */
         .layout {
             display: grid;
             grid-template-columns: var(--sidebar-w) 1fr;
             min-height: calc(100vh - 53px);
         }
 
+        /* SIDEBAR */
         .sidebar {
-            background: rgba(10, 18, 32, 0.6);
-            border-right: 1px solid var(--glass-border);
-            padding: 20px 0 40px;
+            background: rgba(10, 18, 32, 0.7);
+            border-right: 1px solid rgba(0, 229, 255, 0.07);
+            padding: 18px 0 80px;
             position: sticky;
             top: 53px;
             height: calc(100vh - 53px);
@@ -156,7 +160,7 @@
 
         .sidebar-section {
             padding: 0 14px;
-            margin-bottom: 22px;
+            margin-bottom: 20px;
         }
 
         .sidebar-label {
@@ -165,7 +169,7 @@
             letter-spacing: 2px;
             color: rgba(200, 204, 214, 0.2);
             text-transform: uppercase;
-            margin-bottom: 7px;
+            margin-bottom: 6px;
             padding: 0 4px;
         }
 
@@ -190,16 +194,16 @@
         }
 
         .sidebar-item.active {
-            background: rgba(0, 229, 255, 0.08);
+            background: rgba(0, 229, 255, 0.1);
             color: var(--cyan);
-            border-color: rgba(0, 229, 255, 0.12);
+            border-color: rgba(0, 229, 255, 0.15);
         }
 
         .sidebar-item i {
             width: 14px;
             text-align: center;
             font-size: 10px;
-            opacity: 0.7;
+            opacity: 0.6;
         }
 
         .sidebar-item.active i {
@@ -207,11 +211,11 @@
         }
 
         .notebook-card {
-            background: linear-gradient(135deg, rgba(0, 229, 255, 0.05), rgba(122, 108, 255, 0.04));
-            border: 1px solid rgba(0, 229, 255, 0.12);
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.07), rgba(122, 108, 255, 0.05));
+            border: 1px solid rgba(0, 229, 255, 0.15);
             border-radius: 10px;
             padding: 12px 13px;
-            margin: 0 0 8px;
+            margin-bottom: 8px;
         }
 
         .notebook-title {
@@ -224,7 +228,7 @@
 
         .notebook-id {
             font-size: 9px;
-            color: rgba(200, 204, 214, 0.22);
+            color: rgba(200, 204, 214, 0.2);
             font-family: 'Orbitron', sans-serif;
             word-break: break-all;
             margin-bottom: 8px;
@@ -267,7 +271,7 @@
 
         .stat-num {
             font-family: 'Orbitron', sans-serif;
-            font-size: 17px;
+            font-size: 18px;
             font-weight: 700;
             color: var(--cyan);
         }
@@ -288,6 +292,7 @@
             text-transform: uppercase;
         }
 
+        /* FILE BUTTONS — apre modal */
         .file-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -306,16 +311,88 @@
             align-items: center;
             gap: 4px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-btn::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            opacity: 0;
+            transition: opacity 0.15s;
         }
 
         .file-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .file-btn:hover::after {
+            opacity: 1;
+        }
+
+        .fb-brief::after,
+        .fb-doc::after {
+            background: linear-gradient(90deg, var(--cyan), var(--teal));
+        }
+
+        .fb-script::after {
+            background: linear-gradient(90deg, var(--teal), var(--violet));
+        }
+
+        .fb-checklist::after {
+            background: linear-gradient(90deg, var(--gold), var(--teal));
+        }
+
+        .fb-audio::after {
+            background: linear-gradient(90deg, var(--violet), var(--cyan));
+        }
+
+        .fb-infographic::after {
+            background: linear-gradient(90deg, var(--magenta), var(--violet));
+        }
+
+        .fb-slides::after {
+            background: linear-gradient(90deg, var(--cyan), var(--magenta));
+        }
+
+        .fb-brief:hover,
+        .fb-doc:hover {
+            border-color: rgba(0, 229, 255, 0.3);
             background: rgba(0, 229, 255, 0.06);
-            border-color: rgba(0, 229, 255, 0.22);
-            transform: translateY(-1px);
+        }
+
+        .fb-script:hover {
+            border-color: rgba(46, 242, 201, 0.3);
+            background: rgba(46, 242, 201, 0.05);
+        }
+
+        .fb-checklist:hover {
+            border-color: rgba(255, 181, 71, 0.3);
+            background: rgba(255, 181, 71, 0.05);
+        }
+
+        .fb-audio:hover {
+            border-color: rgba(122, 108, 255, 0.3);
+            background: rgba(122, 108, 255, 0.06);
+        }
+
+        .fb-infographic:hover {
+            border-color: rgba(255, 47, 214, 0.3);
+            background: rgba(255, 47, 214, 0.05);
+        }
+
+        .fb-slides:hover {
+            border-color: rgba(0, 229, 255, 0.3);
+            background: rgba(0, 229, 255, 0.05);
         }
 
         .file-btn-icon {
-            font-size: 15px;
+            font-size: 18px;
             line-height: 1;
         }
 
@@ -333,6 +410,131 @@
             font-family: 'Orbitron', sans-serif;
         }
 
+        .file-btn-badge {
+            font-size: 7px;
+            font-weight: 700;
+            padding: 1px 5px;
+            border-radius: 4px;
+            margin-top: 2px;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-cyan {
+            background: rgba(0, 229, 255, 0.1);
+            color: var(--cyan);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+        }
+
+        .badge-violet {
+            background: rgba(122, 108, 255, 0.1);
+            color: var(--violet);
+            border: 1px solid rgba(122, 108, 255, 0.2);
+        }
+
+        .badge-magenta {
+            background: rgba(255, 47, 214, 0.1);
+            color: var(--magenta);
+            border: 1px solid rgba(255, 47, 214, 0.2);
+        }
+
+        .badge-gold {
+            background: rgba(255, 181, 71, 0.1);
+            color: var(--gold);
+            border: 1px solid rgba(255, 181, 71, 0.2);
+        }
+
+        /* KANBAN */
+        .kanban-card {
+            background: linear-gradient(135deg, rgba(255, 47, 214, 0.07), rgba(122, 108, 255, 0.05));
+            border: 1px solid rgba(255, 47, 214, 0.18);
+            border-radius: 10px;
+            padding: 13px;
+            margin-bottom: 8px;
+        }
+
+        .kanban-card-title {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--magenta);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .kanban-card-sub {
+            font-size: 10px;
+            color: rgba(200, 204, 214, 0.35);
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .btn-kanban {
+            background: linear-gradient(135deg, rgba(255, 47, 214, 0.15), rgba(122, 108, 255, 0.12));
+            border: 1px solid rgba(255, 47, 214, 0.3);
+            color: var(--magenta);
+            padding: 9px 12px;
+            border-radius: 8px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            margin-bottom: 6px;
+        }
+
+        .btn-kanban:hover {
+            background: linear-gradient(135deg, rgba(255, 47, 214, 0.25), rgba(122, 108, 255, 0.2));
+            border-color: rgba(255, 47, 214, 0.5);
+            transform: translateY(-1px);
+        }
+
+        .btn-kanban-copy {
+            background: rgba(122, 108, 255, 0.1);
+            border: 1px solid rgba(122, 108, 255, 0.25);
+            color: var(--violet);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-kanban-copy:hover {
+            background: rgba(122, 108, 255, 0.18);
+            border-color: rgba(122, 108, 255, 0.45);
+        }
+
+        .kanban-toast {
+            display: none;
+            font-size: 10px;
+            color: var(--teal);
+            text-align: center;
+            margin-top: 6px;
+            padding: 5px;
+            background: rgba(46, 242, 201, 0.07);
+            border-radius: 6px;
+            border: 1px solid rgba(46, 242, 201, 0.15);
+        }
+
+        .kanban-toast.show {
+            display: block;
+        }
+
+        /* MAIN */
         .main {
             padding: 26px 32px 60px;
             background: var(--grad-deep);
@@ -343,6 +545,10 @@
 
         .page-header {
             margin-bottom: 22px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
         }
 
         .page-title {
@@ -362,10 +568,50 @@
             color: rgba(200, 204, 214, 0.28);
         }
 
+        .page-header-actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+            padding-top: 4px;
+        }
+
+        .btn-action {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(200, 204, 214, 0.5);
+            padding: 7px 13px;
+            border-radius: 7px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-action:hover {
+            border-color: rgba(0, 229, 255, 0.3);
+            color: var(--cyan);
+            background: rgba(0, 229, 255, 0.05);
+        }
+
+        .btn-action-primary {
+            background: rgba(0, 229, 255, 0.08);
+            border: 1px solid rgba(0, 229, 255, 0.25);
+            color: var(--cyan);
+        }
+
+        .btn-action-primary:hover {
+            background: rgba(0, 229, 255, 0.15);
+        }
+
+        /* TABS */
         .tabs {
             display: flex;
             gap: 2px;
-            border-bottom: 1px solid var(--glass-border);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
             margin-bottom: 22px;
             overflow-x: auto;
             scrollbar-width: none;
@@ -376,7 +622,7 @@
         }
 
         .tab {
-            padding: 8px 15px;
+            padding: 8px 16px;
             font-size: 10px;
             font-weight: 700;
             letter-spacing: 1.5px;
@@ -406,15 +652,58 @@
             display: block;
         }
 
+        /* CONTENT CARD */
         .content-card {
-            background: rgba(15, 28, 46, 0.45);
-            border: 1px solid var(--glass-border);
-            border-top: 2px solid rgba(0, 229, 255, 0.15);
+            background: rgba(15, 28, 46, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 12px;
             padding: 26px;
             margin-bottom: 18px;
             max-width: 100%;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .card-brief::before {
+            background: linear-gradient(90deg, var(--cyan), var(--teal));
+        }
+
+        .card-doc::before {
+            background: linear-gradient(90deg, var(--violet), var(--cyan));
+        }
+
+        .card-script::before {
+            background: linear-gradient(90deg, var(--teal), var(--violet));
+        }
+
+        .card-checklist::before {
+            background: linear-gradient(90deg, var(--gold), var(--teal));
+        }
+
+        .card-quiz::before {
+            background: linear-gradient(90deg, var(--magenta), var(--violet));
+        }
+
+        .card-flash::before {
+            background: linear-gradient(90deg, var(--violet), var(--gold));
+        }
+
+        .card-media::before {
+            background: linear-gradient(90deg, var(--cyan), var(--magenta));
+        }
+
+        .card-sources::before {
+            background: linear-gradient(90deg, rgba(200, 204, 214, 0.3), var(--cyan));
         }
 
         .content-card-label {
@@ -426,7 +715,7 @@
             margin-bottom: 16px;
         }
 
-        /* MD BODY — Gemini CSS (corretto) */
+        /* MD BODY */
         .md-body {
             font-size: 13px;
             color: rgba(200, 204, 214, 0.8);
@@ -564,6 +853,7 @@
             margin: 16px 0;
         }
 
+        /* QUIZ */
         .quiz-container {
             display: flex;
             flex-direction: column;
@@ -639,6 +929,35 @@
             margin-top: 14px;
         }
 
+        .quiz-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 16px;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            color: var(--cyan);
+            padding: 7px 16px;
+            border-radius: 7px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-ghost:hover {
+            background: rgba(0, 229, 255, 0.06);
+            border-color: rgba(0, 229, 255, 0.4);
+        }
+
+        /* FLASHCARDS */
         .flashcards-nav {
             display: flex;
             align-items: center;
@@ -709,13 +1028,13 @@
         }
 
         .flashcard-front {
-            background: linear-gradient(135deg, rgba(122, 108, 255, 0.12), rgba(0, 229, 255, 0.06));
-            border: 1px solid rgba(122, 108, 255, 0.2);
+            background: linear-gradient(135deg, rgba(122, 108, 255, 0.14), rgba(0, 229, 255, 0.07));
+            border: 1px solid rgba(122, 108, 255, 0.25);
         }
 
         .flashcard-back {
-            background: linear-gradient(135deg, rgba(255, 181, 71, 0.08), rgba(46, 242, 201, 0.06));
-            border: 1px solid rgba(255, 181, 71, 0.18);
+            background: linear-gradient(135deg, rgba(255, 181, 71, 0.1), rgba(46, 242, 201, 0.07));
+            border: 1px solid rgba(255, 181, 71, 0.22);
             transform: rotateY(180deg);
         }
 
@@ -763,6 +1082,7 @@
             border-radius: 50%;
             background: rgba(200, 204, 214, 0.15);
             transition: all 0.2s;
+            cursor: pointer;
         }
 
         .flash-dot.active {
@@ -774,9 +1094,10 @@
             background: rgba(200, 204, 214, 0.35);
         }
 
+        /* AUDIO */
         .audio-player {
-            background: linear-gradient(135deg, rgba(0, 229, 255, 0.04), rgba(122, 108, 255, 0.03));
-            border: 1px solid rgba(0, 229, 255, 0.1);
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.05), rgba(122, 108, 255, 0.04));
+            border: 1px solid rgba(0, 229, 255, 0.12);
             border-radius: 12px;
             padding: 18px 22px;
         }
@@ -801,7 +1122,7 @@
             color: #080C12;
             flex-shrink: 0;
             transition: opacity 0.2s;
-            box-shadow: 0 0 18px rgba(0, 229, 255, 0.2);
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.25);
         }
 
         .audio-play-btn:hover {
@@ -910,12 +1231,12 @@
 
         .media-card:hover {
             border-color: rgba(0, 229, 255, 0.25);
-            background: rgba(0, 229, 255, 0.04);
+            background: rgba(0, 229, 255, 0.05);
             transform: translateY(-2px);
         }
 
         .media-icon {
-            font-size: 24px;
+            font-size: 26px;
             margin-bottom: 7px;
         }
 
@@ -932,7 +1253,7 @@
             font-family: 'Orbitron', sans-serif;
         }
 
-        .badge {
+        .badge-ready {
             display: inline-block;
             margin-top: 7px;
             font-size: 8px;
@@ -940,9 +1261,6 @@
             padding: 2px 8px;
             border-radius: 10px;
             letter-spacing: 1px;
-        }
-
-        .badge-ready {
             background: rgba(46, 242, 201, 0.1);
             color: var(--teal);
             border: 1px solid rgba(46, 242, 201, 0.2);
@@ -1017,58 +1335,359 @@
             z-index: 0;
         }
 
-        @media print {
-            * {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
+        /* ===== MODAL EXPORT ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
 
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal {
+            background: linear-gradient(160deg, rgba(15, 28, 46, 0.99), rgba(8, 12, 18, 0.99));
+            border: 1px solid rgba(0, 229, 255, 0.15);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 700px;
+            max-height: 88vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 0 80px rgba(0, 229, 255, 0.07), 0 0 0 1px rgba(255, 255, 255, 0.04);
+        }
+
+        .modal-top {
+            height: 3px;
+            background: var(--grad-main);
+            flex-shrink: 0;
+        }
+
+        .modal-header {
+            padding: 18px 22px 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .modal-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .modal-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .modal-title-block {}
+
+        .modal-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: var(--silver);
+            margin-bottom: 2px;
+        }
+
+        .modal-subtitle {
+            font-size: 10px;
+            color: rgba(200, 204, 214, 0.3);
+        }
+
+        .modal-close {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(200, 204, 214, 0.4);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 47, 214, 0.12);
+            border-color: rgba(255, 47, 214, 0.3);
+            color: var(--magenta);
+        }
+
+        .modal-preview {
+            flex: 1;
+            overflow-y: auto;
+            padding: 18px 22px;
+        }
+
+        .modal-preview-text {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            color: rgba(200, 204, 214, 0.6);
+            line-height: 1.75;
+            white-space: pre-wrap;
+            word-break: break-word;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+            padding: 16px;
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        .modal-preview-rendered {
+            font-size: 12px;
+            color: rgba(200, 204, 214, 0.75);
+            line-height: 1.7;
+            max-height: 280px;
+            overflow-y: auto;
+            padding: 4px;
+        }
+
+        .modal-preview-img {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .modal-preview-audio {
+            width: 100%;
+            margin-top: 10px;
+            border-radius: 8px;
+        }
+
+        .modal-preview-pdf {
+            background: rgba(255, 47, 214, 0.05);
+            border: 1px solid rgba(255, 47, 214, 0.15);
+            border-radius: 8px;
+            padding: 28px;
+            text-align: center;
+        }
+
+        .modal-preview-pdf-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+
+        .modal-preview-pdf-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            color: var(--magenta);
+            margin-bottom: 6px;
+        }
+
+        .modal-preview-pdf-sub {
+            font-size: 11px;
+            color: rgba(200, 204, 214, 0.35);
+        }
+
+        .modal-footer {
+            padding: 16px 22px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            flex-shrink: 0;
+        }
+
+        .modal-footer-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: rgba(200, 204, 214, 0.2);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .mbtn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 14px;
+            border-radius: 8px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s;
+            border: 1px solid;
+            white-space: nowrap;
+        }
+
+        .mbtn:hover {
+            transform: translateY(-1px);
+        }
+
+        .mbtn-txt {
+            background: rgba(0, 229, 255, 0.07);
+            border-color: rgba(0, 229, 255, 0.2);
+            color: var(--cyan);
+        }
+
+        .mbtn-txt:hover {
+            background: rgba(0, 229, 255, 0.14);
+            border-color: rgba(0, 229, 255, 0.4);
+        }
+
+        .mbtn-pdf {
+            background: rgba(255, 47, 214, 0.07);
+            border-color: rgba(255, 47, 214, 0.2);
+            color: var(--magenta);
+        }
+
+        .mbtn-pdf:hover {
+            background: rgba(255, 47, 214, 0.14);
+            border-color: rgba(255, 47, 214, 0.4);
+        }
+
+        .mbtn-img {
+            background: rgba(122, 108, 255, 0.07);
+            border-color: rgba(122, 108, 255, 0.2);
+            color: var(--violet);
+        }
+
+        .mbtn-img:hover {
+            background: rgba(122, 108, 255, 0.14);
+            border-color: rgba(122, 108, 255, 0.4);
+        }
+
+        .mbtn-json {
+            background: rgba(255, 181, 71, 0.07);
+            border-color: rgba(255, 181, 71, 0.2);
+            color: var(--gold);
+        }
+
+        .mbtn-json:hover {
+            background: rgba(255, 181, 71, 0.14);
+            border-color: rgba(255, 181, 71, 0.4);
+        }
+
+        .mbtn-copy {
+            background: rgba(46, 242, 201, 0.07);
+            border-color: rgba(46, 242, 201, 0.2);
+            color: var(--teal);
+        }
+
+        .mbtn-copy:hover {
+            background: rgba(46, 242, 201, 0.14);
+            border-color: rgba(46, 242, 201, 0.4);
+        }
+
+        .mbtn-open {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.12);
+            color: rgba(200, 204, 214, 0.6);
+        }
+
+        .mbtn-open:hover {
+            border-color: rgba(0, 229, 255, 0.3);
+            color: var(--cyan);
+        }
+
+        .modal-toast {
+            font-size: 10px;
+            color: var(--teal);
+            margin-top: 8px;
+            display: none;
+            padding: 5px 10px;
+            background: rgba(46, 242, 201, 0.07);
+            border-radius: 6px;
+            border: 1px solid rgba(46, 242, 201, 0.15);
+        }
+
+        .modal-toast.show {
+            display: inline-block;
+        }
+
+        /* PRINT */
+        @media print {
+
+            script,
+            script[type="text/markdown"],
+            script[type="text/plain"],
             .header,
             .sidebar,
             .glow,
             .glow2,
             .tabs,
-            .btn-export,
-            .btn-ghost,
+            .btn-pdf-header,
+            .btn-nb,
             .flashcards-nav,
             .flash-hint,
             .flash-dots,
             .audio-player,
             .audio-visualizer,
             .media-grid,
-            .flash-btn {
+            .flash-btn,
+            .quiz-actions,
+            .page-header-actions,
+            .kanban-card,
+            .modal-overlay {
                 display: none !important;
+            }
+
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
             }
 
             html,
             body {
-                background: #ffffff !important;
+                background: #fff !important;
                 color: #1a1a2e !important;
             }
 
             .layout {
                 display: block !important;
-                background: #ffffff !important;
+                background: #fff !important;
             }
 
             .main {
                 padding: 20px !important;
-                background: #ffffff !important;
+                background: #fff !important;
             }
 
             .tab-panel {
                 display: block !important;
-                margin-bottom: 28px;
+                margin-bottom: 24px;
                 page-break-inside: avoid;
             }
 
             .content-card {
-                border: 1px solid #ccccdd !important;
+                border: 1px solid #ccddee !important;
                 border-top: 3px solid #0088aa !important;
                 background: #f8f9fc !important;
                 padding: 20px;
                 page-break-inside: avoid;
                 border-radius: 6px !important;
+                overflow: visible !important;
+            }
+
+            .content-card::before {
+                display: none !important;
             }
 
             .content-card-label {
@@ -1078,6 +1697,7 @@
             .md-body {
                 color: #1a1a2e !important;
                 font-size: 11.5px !important;
+                line-height: 1.75 !important;
             }
 
             .md-body h1 {
@@ -1117,10 +1737,41 @@
                 color: #1a1a2e !important;
             }
 
+            .md-body blockquote {
+                border-left: 3px solid #0088aa !important;
+                background: #f0f8fb !important;
+                color: #334455 !important;
+            }
+
+            .page-title {
+                color: #003355 !important;
+                -webkit-text-fill-color: #003355 !important;
+                background: none !important;
+            }
+
+            .page-sub {
+                color: #667799 !important;
+            }
+
+            .page-header {
+                margin-bottom: 16px !important;
+                padding-bottom: 12px !important;
+                border-bottom: 1px solid #ccddee !important;
+            }
+
+            .quiz-q {
+                background: #f5f8fc !important;
+                border: 1px solid #ccddee !important;
+            }
+
+            .quiz-question {
+                color: #1a1a2e !important;
+            }
+
             .quiz-opt {
                 border: 1px solid #ccddee !important;
                 color: #445566 !important;
-                background: #ffffff !important;
+                background: #fff !important;
             }
 
             .quiz-opt.correct {
@@ -1135,15 +1786,6 @@
                 color: #990033 !important;
             }
 
-            .quiz-question {
-                color: #1a1a2e !important;
-            }
-
-            .quiz-q {
-                background: #f5f8fc !important;
-                border: 1px solid #ccddee !important;
-            }
-
             .source-item {
                 border: 1px solid #ccddee !important;
                 background: #f8fafc !important;
@@ -1156,16 +1798,6 @@
             .source-url {
                 color: #0055aa !important;
             }
-
-            .page-header {
-                margin-bottom: 16px !important;
-                padding-bottom: 12px !important;
-                border-bottom: 1px solid #ccddee !important;
-            }
-
-            .page-sub {
-                color: #667799 !important;
-            }
         }
     </style>
 </head>
@@ -1173,15 +1805,18 @@
 <body>
     <div class="glow"></div>
     <div class="glow2"></div>
+
     <header class="header">
         <div class="logo">THE SPATIAL WAVE &middot; TSW OS</div>
         <div class="header-meta">{{MODE}} &middot; {{DATE}} &middot; {{FILE_COUNT}} file &middot; {{TOTAL_SIZE}}</div>
         <div class="header-right">
-            <a href="{{NOTEBOOK_URL}}" target="_blank" class="btn-ghost"><i class="fa-solid fa-book-open"></i>
+            <a href="{{NOTEBOOK_URL}}" target="_blank" class="btn-nb"><i class="fa-solid fa-book-open"></i>
                 NotebookLM</a>
-            <button class="btn-export" onclick="exportPDF()"><i class="fa-solid fa-file-pdf"></i> Esporta PDF</button>
+            <button class="btn-pdf-header" onclick="exportPDF()"><i class="fa-solid fa-file-pdf"></i> Esporta
+                PDF</button>
         </div>
     </header>
+
     <div class="layout">
         <aside class="sidebar">
             <div class="sidebar-section">
@@ -1201,6 +1836,54 @@
                 <div class="sidebar-item" onclick="showTab('media')"><i class="fa-solid fa-photo-film"></i> Media</div>
                 <div class="sidebar-item" onclick="showTab('sources')"><i class="fa-solid fa-link"></i> Fonti</div>
             </div>
+            <div class="sidebar-section">
+                <div class="sidebar-label">Scarica File</div>
+                <div class="file-grid">
+                    <div class="file-btn fb-brief" onclick="openModal('brief')">
+                        <div class="file-btn-icon">📄</div>
+                        <div class="file-btn-name">Master Brief</div>
+                        <div class="file-btn-ext">.md</div>
+                        <div class="file-btn-badge badge-cyan">TXT · PDF · JSON</div>
+                    </div>
+                    <div class="file-btn fb-doc" onclick="openModal('doc')">
+                        <div class="file-btn-icon">📋</div>
+                        <div class="file-btn-name">Main Doc</div>
+                        <div class="file-btn-ext">.md</div>
+                        <div class="file-btn-badge badge-cyan">TXT · PDF · JSON</div>
+                    </div>
+                    <div class="file-btn fb-script" onclick="openModal('script')">
+                        <div class="file-btn-icon">🎙</div>
+                        <div class="file-btn-name">Script Lyra</div>
+                        <div class="file-btn-ext">.md</div>
+                        <div class="file-btn-badge badge-violet">TXT · PDF · JSON</div>
+                    </div>
+                    <div class="file-btn fb-checklist" onclick="openModal('checklist')">
+                        <div class="file-btn-icon">✅</div>
+                        <div class="file-btn-name">Checklist</div>
+                        <div class="file-btn-ext">.md</div>
+                        <div class="file-btn-badge badge-gold">TXT · PDF · JSON</div>
+                    </div>
+                    <div class="file-btn fb-audio" onclick="openModal('audio')">
+                        <div class="file-btn-icon">🎧</div>
+                        <div class="file-btn-name">Audio Brief</div>
+                        <div class="file-btn-ext">.mp3</div>
+                        <div class="file-btn-badge badge-violet">PLAY · FILE</div>
+                    </div>
+                    <div class="file-btn fb-infographic" onclick="openModal('infographic')">
+                        <div class="file-btn-icon">🖼</div>
+                        <div class="file-btn-name">Infografica</div>
+                        <div class="file-btn-ext">.png</div>
+                        <div class="file-btn-badge badge-magenta">PREVIEW · PNG</div>
+                    </div>
+                    <div class="file-btn fb-slides" onclick="openModal('slides')" style="grid-column:span 2">
+                        <div class="file-btn-icon">📊</div>
+                        <div class="file-btn-name">Slide Deck</div>
+                        <div class="file-btn-ext">.pdf</div>
+                        <div class="file-btn-badge badge-cyan">APRI · DOWNLOAD</div>
+                    </div>
+                </div>
+            </div>
+
             <div class="sidebar-section">
                 <div class="sidebar-label">Notebook</div>
                 <div class="notebook-card">
@@ -1223,50 +1906,32 @@
                 </div>
             </div>
             <div class="sidebar-section">
-                <div class="sidebar-label">Scarica File</div>
-                <div class="file-grid">
-                    <div class="file-btn" onclick="downloadFile('01_MASTER_BRIEF.md')">
-                        <div class="file-btn-icon">&#128196;</div>
-                        <div class="file-btn-name">Master Brief</div>
-                        <div class="file-btn-ext">.md</div>
-                    </div>
-                    <div class="file-btn" onclick="downloadFile('02_MAIN_DOC.md')">
-                        <div class="file-btn-icon">&#128196;</div>
-                        <div class="file-btn-name">Main Doc</div>
-                        <div class="file-btn-ext">.md</div>
-                    </div>
-                    <div class="file-btn" onclick="downloadFile('03_SCRIPT_LYRA.md')">
-                        <div class="file-btn-icon">&#127897;</div>
-                        <div class="file-btn-name">Script Lyra</div>
-                        <div class="file-btn-ext">.md</div>
-                    </div>
-                    <div class="file-btn" onclick="downloadFile('04_CHECKLIST.md')">
-                        <div class="file-btn-icon">&#9989;</div>
-                        <div class="file-btn-name">Checklist</div>
-                        <div class="file-btn-ext">.md</div>
-                    </div>
-                    <div class="file-btn" onclick="downloadFile('09_AUDIO_BRIEF.mp3')">
-                        <div class="file-btn-icon">&#127911;</div>
-                        <div class="file-btn-name">Audio</div>
-                        <div class="file-btn-ext">.mp3</div>
-                    </div>
-                    <div class="file-btn" onclick="downloadFile('10_INFOGRAPHIC.png')">
-                        <div class="file-btn-icon">&#128444;</div>
-                        <div class="file-btn-name">Infografica</div>
-                        <div class="file-btn-ext">.png</div>
-                    </div>
-                    <div class="file-btn" onclick="window.open('11_SLIDE_DECK.pdf')" style="grid-column:span 2;">
-                        <div class="file-btn-icon">&#128202;</div>
-                        <div class="file-btn-name">Slide Deck</div>
-                        <div class="file-btn-ext">.pdf</div>
-                    </div>
+                <div class="sidebar-label">Push to Kanban</div>
+                <div class="kanban-card">
+                    <div class="kanban-card-title"><i class="fa-solid fa-table-columns"></i> AI Content Factory</div>
+                    <div class="kanban-card-sub">Genera card JSON dal brief per il Kanban board. Usa domani per
+                        collegare le pipeline.</div>
+                    <button class="btn-kanban" onclick="openModal('kanban')"><i class="fa-solid fa-eye"></i> Anteprima +
+                        Export</button>
+                    <button class="btn-kanban-copy" onclick="quickCopyJson()"><i class="fa-solid fa-copy"></i> Copia
+                        JSON rapido</button>
+                    <div class="kanban-toast" id="kanbanToast">✓ Copiato!</div>
                 </div>
             </div>
         </aside>
+
         <main class="main">
             <div class="page-header">
-                <div class="page-title">{{TOPIC}}</div>
-                <div class="page-sub">{{MODE}} &middot; Generato il {{DATE}}</div>
+                <div>
+                    <div class="page-title">{{TOPIC}}</div>
+                    <div class="page-sub">{{MODE}} &middot; Generato il {{DATE}}</div>
+                </div>
+                <div class="page-header-actions">
+                    <button class="btn-action" onclick="copyAllText()"><i class="fa-solid fa-copy"></i> Copia
+                        tutto</button>
+                    <button class="btn-action btn-action-primary" onclick="exportPDF()"><i
+                            class="fa-solid fa-file-export"></i> PDF</button>
+                </div>
             </div>
             <div class="tabs">
                 <div class="tab active" id="tab-brief" onclick="showTab('brief')">Brief</div>
@@ -1279,39 +1944,39 @@
                 <div class="tab" id="tab-sources" onclick="showTab('sources')">Fonti</div>
             </div>
             <div class="tab-panel active" id="panel-brief">
-                <div class="content-card">
+                <div class="content-card card-brief">
                     <div class="content-card-label">Master Brief</div>
                     <div class="md-body" id="briefBody"></div>
                 </div>
             </div>
             <div class="tab-panel" id="panel-doc">
-                <div class="content-card">
+                <div class="content-card card-doc">
                     <div class="content-card-label">Documento Principale</div>
                     <div class="md-body" id="docBody"></div>
                 </div>
             </div>
             <div class="tab-panel" id="panel-script">
-                <div class="content-card">
+                <div class="content-card card-script">
                     <div class="content-card-label">Script Lyra Voice</div>
                     <div class="md-body" id="scriptBody"></div>
                 </div>
             </div>
             <div class="tab-panel" id="panel-checklist">
-                <div class="content-card">
+                <div class="content-card card-checklist">
                     <div class="content-card-label">Checklist Operativa</div>
                     <div class="md-body" id="checklistBody"></div>
                 </div>
             </div>
             <div class="tab-panel" id="panel-quiz">
-                <div class="content-card">
+                <div class="content-card card-quiz">
                     <div class="content-card-label">Quiz Interattivo</div>
                     <div class="quiz-container" id="quizContainer"></div>
-                    <div style="text-align:center;margin-top:18px;"><button class="btn-ghost" onclick="resetQuiz()"><i
+                    <div class="quiz-actions"><button class="btn-ghost" onclick="resetQuiz()"><i
                                 class="fa-solid fa-rotate-left"></i> Ricomincia</button></div>
                 </div>
             </div>
             <div class="tab-panel" id="panel-flash">
-                <div class="content-card">
+                <div class="content-card card-flash">
                     <div class="content-card-label">Flashcards</div>
                     <div class="flashcards-nav">
                         <button class="flash-btn" onclick="prevCard()"><i class="fa-solid fa-chevron-left"></i></button>
@@ -1327,42 +1992,39 @@
                             </div>
                             <div class="flashcard-back">
                                 <div class="flashcard-label">Risposta</div>
-                                <div class="flashcard-text" id="flashA">&#8212;</div>
+                                <div class="flashcard-text" id="flashA">—</div>
                             </div>
                         </div>
                     </div>
-                    <div class="flash-hint">Clicca per girare &middot; &#8592; &#8594; per navigare</div>
+                    <div class="flash-hint">Click per girare &middot; ← → per navigare &middot; Spazio per girare</div>
                     <div class="flash-dots" id="flashDots"></div>
                 </div>
             </div>
             <div class="tab-panel" id="panel-media">
-                <div class="content-card">
+                <div class="content-card card-media">
                     <div class="content-card-label">Media &amp; Visuals</div>
                     <div class="media-grid">
-                        <div class="media-card" onclick="toggleAudio()">
-                            <div class="media-icon">&#127897;</div>
+                        <div class="media-card" onclick="openModal('audio')">
+                            <div class="media-icon">🎧</div>
                             <div class="media-label">Audio Brief</div>
-                            <div class="media-sub">09_AUDIO_BRIEF.mp3</div>
-                            <div class="badge badge-ready">PRONTO</div>
+                            <div class="media-sub">09_AUDIO_BRIEF.mp3</div><span class="badge-ready">PRONTO</span>
                         </div>
-                        <div class="media-card" onclick="window.open('11_SLIDE_DECK.pdf')">
-                            <div class="media-icon">&#128202;</div>
+                        <div class="media-card" onclick="openModal('slides')">
+                            <div class="media-icon">📊</div>
                             <div class="media-label">Slide Deck</div>
-                            <div class="media-sub">11_SLIDE_DECK.pdf</div>
-                            <div class="badge badge-ready">PRONTO</div>
+                            <div class="media-sub">11_SLIDE_DECK.pdf</div><span class="badge-ready">PRONTO</span>
                         </div>
-                        <div class="media-card" onclick="downloadFile('10_INFOGRAPHIC.png')">
-                            <div class="media-icon">&#128444;</div>
+                        <div class="media-card" onclick="openModal('infographic')">
+                            <div class="media-icon">🖼</div>
                             <div class="media-label">Infografica</div>
-                            <div class="media-sub">10_INFOGRAPHIC.png</div>
-                            <div class="badge badge-ready">PRONTO</div>
+                            <div class="media-sub">10_INFOGRAPHIC.png</div><span class="badge-ready">PRONTO</span>
                         </div>
                     </div>
                     <div class="audio-player">
                         <div class="audio-controls">
-                            <button class="audio-play-btn" id="playBtn" onclick="toggleAudio()">&#9654;</button>
+                            <button class="audio-play-btn" id="playBtn" onclick="toggleAudio()">▶</button>
                             <div class="audio-info">
-                                <div class="audio-title">Audio Brief &mdash; {{TOPIC}}</div>
+                                <div class="audio-title">Audio Brief — {{TOPIC}}</div>
                                 <div class="audio-sub">Narrazione Lyra Voice</div>
                             </div>
                             <div class="audio-visualizer">
@@ -1385,12 +2047,35 @@
                 </div>
             </div>
             <div class="tab-panel" id="panel-sources">
-                <div class="content-card">
+                <div class="content-card card-sources">
                     <div class="content-card-label">Fonti Gold</div>
                     <div id="sourcesList">{{SOURCES_LIST}}</div>
                 </div>
             </div>
         </main>
+    </div>
+
+    <!-- MODAL EXPORT -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+        <div class="modal" id="modal">
+            <div class="modal-top" id="modalTop"></div>
+            <div class="modal-header">
+                <div class="modal-header-left">
+                    <div class="modal-icon" id="modalIcon"></div>
+                    <div class="modal-title-block">
+                        <div class="modal-title" id="modalTitle">EXPORT</div>
+                        <div class="modal-subtitle" id="modalSubtitle">Scegli il formato</div>
+                    </div>
+                </div>
+                <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-preview" id="modalPreview"></div>
+            <div class="modal-footer">
+                <div class="modal-footer-label">Esporta come</div>
+                <div class="modal-actions" id="modalActions"></div>
+                <span class="modal-toast" id="modalToast"></span>
+            </div>
+        </div>
     </div>
 
     <script type="text/markdown" id="md-brief">{{CONTENT_BRIEF}}</script>
@@ -1401,17 +2086,15 @@
     <script type="text/plain" id="flash-raw">{{CONTENT_FLASHCARDS_RAW}}</script>
 
     <script>
-        // FIX: breaks:false evita l'effetto "colonna stretta" da \n singoli nel MD
         marked.setOptions({ breaks: false, gfm: true });
 
-        // cleanMd: line-by-line (Gemini approach — immune ai bug regex multilinea)
+        function getRaw(id) { var el = document.getElementById(id); return el ? el.textContent : ''; }
+
         function cleanMd(raw) {
             if (!raw) return '';
-            var lines = raw.split('\n');
-            var out = [];
+            var lines = raw.split('\n'), out = [];
             for (var i = 0; i < lines.length; i++) {
-                var line = lines[i].trim();
-                var lower = line.toLowerCase();
+                var line = lines[i].trim(), lower = line.toLowerCase();
                 if (lower.indexOf('conversation:') === 0) continue;
                 if (lower.indexOf('continuing conversation') === 0) continue;
                 if (lower.indexOf('resumed') === 0) continue;
@@ -1419,23 +2102,21 @@
                 if (line.match(/^[a-f0-9]{8}-[a-f0-9]{4}/i)) continue;
                 out.push(lines[i]);
             }
-            var result = out.join('\n');
-            result = result.replace(/`+\s*\*\*3\.[\s\S]*$/m, '');
-            result = result.replace(/`+\s*\*\*Step\s*3[\s\S]*$/m, '');
-            return result.trim();
+            var r = out.join('\n');
+            r = r.replace(/`+\s*\*\*3\.[\s\S]*$/m, '');
+            r = r.replace(/`+\s*\*\*Step\s*3[\s\S]*$/m, '');
+            return r.trim();
         }
 
         function renderMd(id, targetId) {
-            var raw = document.getElementById(id) ? document.getElementById(id).textContent : '';
             var el = document.getElementById(targetId);
-            if (el) el.innerHTML = marked.parse(cleanMd(raw));
+            if (el) el.innerHTML = marked.parse(cleanMd(getRaw(id)));
         }
 
         function showTab(name) {
             document.querySelectorAll('.tab-panel').forEach(function (p) { p.classList.remove('active'); });
             document.querySelectorAll('.tab').forEach(function (t) { t.classList.remove('active'); });
-            var panel = document.getElementById('panel-' + name);
-            var tab = document.getElementById('tab-' + name);
+            var panel = document.getElementById('panel-' + name), tab = document.getElementById('tab-' + name);
             if (panel) panel.classList.add('active');
             if (tab) tab.classList.add('active');
             document.querySelectorAll('.sidebar-item').forEach(function (s) {
@@ -1445,19 +2126,163 @@
             });
         }
 
+        // ===== MODAL =====
+        var MODAL_CONFIG = {
+            brief: { title: 'MASTER BRIEF', subtitle: '01_MASTER_BRIEF.md', icon: '📄', color: '#00E5FF', top: 'linear-gradient(90deg,#00E5FF,#2EF2C9)', src: 'md-brief', type: 'md' },
+            doc: { title: 'DOCUMENTAZIONE', subtitle: '02_MAIN_DOC.md', icon: '📋', color: '#7A6CFF', top: 'linear-gradient(90deg,#7A6CFF,#00E5FF)', src: 'md-doc', type: 'md' },
+            script: { title: 'SCRIPT LYRA', subtitle: '03_SCRIPT_LYRA.md', icon: '🎙', color: '#2EF2C9', top: 'linear-gradient(90deg,#2EF2C9,#7A6CFF)', src: 'md-script', type: 'md' },
+            checklist: { title: 'CHECKLIST', subtitle: '04_CHECKLIST.md', icon: '✅', color: '#FFB547', top: 'linear-gradient(90deg,#FFB547,#2EF2C9)', src: 'md-checklist', type: 'md' },
+            audio: { title: 'AUDIO BRIEF', subtitle: '09_AUDIO_BRIEF.mp3', icon: '🎧', color: '#7A6CFF', top: 'linear-gradient(90deg,#7A6CFF,#00E5FF)', type: 'audio' },
+            infographic: { title: 'INFOGRAFICA', subtitle: '10_INFOGRAPHIC.png', icon: '🖼', color: '#FF2FD6', top: 'linear-gradient(90deg,#FF2FD6,#7A6CFF)', type: 'image' },
+            slides: { title: 'SLIDE DECK', subtitle: '11_SLIDE_DECK.pdf', icon: '📊', color: '#00E5FF', top: 'linear-gradient(90deg,#00E5FF,#FF2FD6)', type: 'pdf' },
+            kanban: { title: 'KANBAN EXPORT', subtitle: 'AI Content Factory JSON', icon: '⚡', color: '#FF2FD6', top: 'linear-gradient(90deg,#FF2FD6,#7A6CFF)', type: 'kanban' }
+        };
+
+        function openModal(key) {
+            var cfg = MODAL_CONFIG[key];
+            if (!cfg) return;
+            document.getElementById('modalTop').style.background = cfg.top;
+            document.getElementById('modalTitle').textContent = cfg.title;
+            document.getElementById('modalSubtitle').textContent = cfg.subtitle;
+            var iconEl = document.getElementById('modalIcon');
+            iconEl.textContent = cfg.icon;
+            iconEl.style.background = 'rgba(' + hexToRgb(cfg.color) + ',0.1)';
+            iconEl.style.border = '1px solid rgba(' + hexToRgb(cfg.color) + ',0.2)';
+            var preview = document.getElementById('modalPreview');
+            var actions = document.getElementById('modalActions');
+            document.getElementById('modalToast').classList.remove('show');
+            if (cfg.type === 'md') {
+                var raw = cleanMd(getRaw(cfg.src));
+                preview.innerHTML = '<div class="modal-preview-text">' + escHtml(raw.substring(0, 2000)) + (raw.length > 2000 ? '\n\n[... continua ...]' : '') + '</div>';
+                actions.innerHTML =
+                    '<button class="mbtn mbtn-txt" onclick="dlBlob(\'' + cfg.src + '\',\'' + cfg.subtitle + '\',\'text/plain\')"><i class="fa-solid fa-file-lines"></i> Testo .txt</button>' +
+                    '<button class="mbtn mbtn-txt" onclick="dlBlob(\'' + cfg.src + '\',\'' + cfg.subtitle.replace('.md', '.md') + '\',\'text/markdown\')"><i class="fa-solid fa-file-code"></i> Markdown .md</button>' +
+                    '<button class="mbtn mbtn-pdf" onclick="printSingle(\'' + cfg.src + '\',\'' + cfg.title + '\')"><i class="fa-solid fa-file-pdf"></i> PDF stampa</button>' +
+                    '<button class="mbtn mbtn-json" onclick="dlJson(\'' + cfg.src + '\',\'' + cfg.subtitle.replace('.md', '.json') + '\')"><i class="fa-solid fa-brackets-curly"></i> JSON</button>' +
+                    '<button class="mbtn mbtn-copy" onclick="copyRaw(\'' + cfg.src + '\')"><i class="fa-solid fa-copy"></i> Copia testo</button>';
+            } else if (cfg.type === 'audio') {
+                preview.innerHTML = '<div style="padding:16px 0"><div style="font-size:11px;color:rgba(200,204,214,0.4);margin-bottom:12px;">Player audio — 09_AUDIO_BRIEF.mp3</div><audio class="modal-preview-audio" controls src="09_AUDIO_BRIEF.mp3"></audio></div>';
+                actions.innerHTML = '<button class="mbtn mbtn-open" onclick="window.open(\'09_AUDIO_BRIEF.mp3\',\'_blank\')"><i class="fa-solid fa-headphones"></i> Apri file</button>' +
+                    '<button class="mbtn mbtn-copy" onclick="copyToast(\'Percorso: 09_AUDIO_BRIEF.mp3\')"><i class="fa-solid fa-copy"></i> Copia percorso</button>';
+            } else if (cfg.type === 'image') {
+                preview.innerHTML = '<img class="modal-preview-img" src="10_INFOGRAPHIC.png" onerror="this.parentElement.innerHTML=\'<div style=padding:40px;text-align:center;color:rgba(200,204,214,0.2)>Infografica non trovata</div>\'">';
+                actions.innerHTML = '<button class="mbtn mbtn-img" onclick="window.open(\'10_INFOGRAPHIC.png\',\'_blank\')"><i class="fa-solid fa-image"></i> Apri immagine</button>' +
+                    '<button class="mbtn mbtn-open" onclick="dlImg()"><i class="fa-solid fa-download"></i> Scarica PNG</button>';
+            } else if (cfg.type === 'pdf') {
+                preview.innerHTML = '<div class="modal-preview-pdf"><div class="modal-preview-pdf-icon">📊</div><div class="modal-preview-pdf-name">11_SLIDE_DECK.pdf</div><div class="modal-preview-pdf-sub">Slide deck generato da NotebookLM</div></div>';
+                actions.innerHTML = '<button class="mbtn mbtn-pdf" onclick="window.open(\'11_SLIDE_DECK.pdf\',\'_blank\')"><i class="fa-solid fa-file-pdf"></i> Apri PDF</button>' +
+                    '<button class="mbtn mbtn-open" onclick="dlFile(\'11_SLIDE_DECK.pdf\')"><i class="fa-solid fa-download"></i> Scarica</button>';
+            } else if (cfg.type === 'kanban') {
+                var cards = buildKanbanCards();
+                var json = JSON.stringify(cards, null, 2);
+                preview.innerHTML = '<div class="modal-preview-text">' + escHtml(json) + '</div>';
+                actions.innerHTML =
+                    '<button class="mbtn mbtn-json" onclick="copyJsonFromModal()"><i class="fa-solid fa-copy"></i> Copia JSON</button>' +
+                    '<button class="mbtn mbtn-json" onclick="dlJsonRaw(buildKanbanCards(),\'kanban_cards.json\')"><i class="fa-solid fa-download"></i> Scarica .json</button>' +
+                    '<button class="mbtn mbtn-pdf" onclick="pushLocalStorage()"><i class="fa-solid fa-arrow-right-to-bracket"></i> Push localStorage</button>';
+            }
+            document.getElementById('modalOverlay').classList.add('open');
+        }
+
+        function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+        function closeModalOutside(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
+
+        function hexToRgb(hex) { var r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex); return r ? parseInt(r[1], 16) + ',' + parseInt(r[2], 16) + ',' + parseInt(r[3], 16) : '200,204,214'; }
+        function escHtml(t) { return t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+        function copyToast(msg) { navigator.clipboard.writeText(msg).then(function () { showModalToast('✓ Copiato!'); }); }
+        function copyRaw(src) { var raw = cleanMd(getRaw(src)); navigator.clipboard.writeText(raw).then(function () { showModalToast('✓ Testo copiato!'); }); }
+        function showModalToast(msg) { var t = document.getElementById('modalToast'); t.textContent = msg; t.classList.add('show'); setTimeout(function () { t.classList.remove('show'); }, 2500); }
+
+        function dlBlob(src, filename, mime) {
+            var content = cleanMd(getRaw(src));
+            var blob = new Blob([content], { type: mime + ';charset=utf-8' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a'); a.href = url; a.download = filename; a.click();
+            setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+            showModalToast('✓ Download avviato!');
+        }
+        function dlJson(src, filename) {
+            var content = cleanMd(getRaw(src));
+            var obj = { topic: '{{TOPIC}}', mode: '{{MODE}}', date: '{{DATE}}', filename: filename, content: content };
+            var blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a'); a.href = url; a.download = filename; a.click();
+            setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+            showModalToast('✓ JSON scaricato!');
+        }
+        function dlJsonRaw(obj, filename) {
+            var blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a'); a.href = url; a.download = filename; a.click();
+            setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+            showModalToast('✓ JSON scaricato!');
+        }
+        function dlFile(filename) { window.open(filename, '_blank'); }
+        function dlImg() { var a = document.createElement('a'); a.href = '10_INFOGRAPHIC.png'; a.download = '10_INFOGRAPHIC.png'; a.click(); }
+
+        function printSingle(src, title) {
+            var content = cleanMd(getRaw(src));
+            var win = window.open('', '_blank', 'width=800,height=600');
+            win.document.write('<html><head><title>' + title + '</title><style>body{font-family:Georgia,serif;max-width:700px;margin:40px auto;line-height:1.8;color:#1a1a2e;}h1,h2,h3{color:#003355;}pre{background:#eef4f8;padding:14px;border-left:3px solid #0088aa;border-radius:4px;}code{background:#e8f4f8;padding:2px 5px;border-radius:3px;}strong{color:#0a0a1a;}</style></head><body>');
+            win.document.write('<h1>' + title + '</h1>');
+            win.document.write('<div>' + marked.parse(content) + '</div>');
+            win.document.write('</body></html>');
+            win.document.close();
+            win.onload = function () { win.print(); };
+        }
+
+        // KANBAN
+        function buildKanbanCards() {
+            var brief = cleanMd(getRaw('md-brief'));
+            var script = cleanMd(getRaw('md-script'));
+            var topic = '{{TOPIC}}';
+            var lines = brief.split('\n').filter(function (l) { return l.trim() && !l.startsWith('#'); });
+            var hook = lines[0] ? lines[0].replace(/^\*+|\*+$/g, '').trim().substring(0, 120) : topic;
+            return [
+                { platform: '{{PRIORITY_PLATFORM}}', format: 'Post', title: topic.substring(0, 60), hook: hook, copy: brief.substring(0, 500), funnel_stage: 'Awareness', brand_voice: 'CALM', hashtags: [], product: topic, status: 'idle' },
+                { platform: '{{PRIORITY_PLATFORM}}', format: 'Reel', title: 'Come funziona: ' + topic.substring(0, 40), hook: 'Scopri il metodo in 60 secondi.', copy: script.substring(0, 500), funnel_stage: 'Interest', brand_voice: 'DIRECT', hashtags: [], product: topic, status: 'idle' }
+            ];
+        }
+        function copyJsonFromModal() {
+            var cards = buildKanbanCards();
+            navigator.clipboard.writeText(JSON.stringify(cards, null, 2)).then(function () { showModalToast('✓ JSON copiato negli appunti!'); });
+        }
+        function pushLocalStorage() {
+            var cards = buildKanbanCards();
+            try {
+                var ex = JSON.parse(localStorage.getItem('tsw_kanban_import') || '[]');
+                localStorage.setItem('tsw_kanban_import', JSON.stringify(ex.concat(cards)));
+                showModalToast('✓ ' + cards.length + ' card pushate!');
+            } catch (e) { copyJsonFromModal(); }
+        }
+        function quickCopyJson() {
+            navigator.clipboard.writeText(JSON.stringify(buildKanbanCards(), null, 2)).then(function () {
+                var t = document.getElementById('kanbanToast'); t.textContent = '✓ JSON copiato!'; t.classList.add('show');
+                setTimeout(function () { t.classList.remove('show'); }, 2500);
+            });
+        }
+        function copyAllText() {
+            var texts = ['brief', 'doc', 'script', 'checklist'].map(function (id) { return cleanMd(getRaw('md-' + id)); }).join('\n\n---\n\n');
+            navigator.clipboard.writeText(texts).then(function () {
+                var t = document.getElementById('kanbanToast'); t.textContent = '✓ Tutto copiato!'; t.classList.add('show');
+                setTimeout(function () { t.classList.remove('show'); }, 2500);
+            });
+        }
+
+        // QUIZ
         var quizData = [];
         function parseQuiz() {
-            var raw = cleanMd(document.getElementById('quiz-raw') ? document.getElementById('quiz-raw').textContent : '');
-            var blocks = raw.split(/\n(?=\d+[\.\)]|\*\*Q\d)/);
-            blocks.forEach(function (block) {
+            var raw = cleanMd(getRaw('quiz-raw')); quizData = [];
+            raw.split(/\n(?=\d+[\.\)]|\*\*Q\d)/).forEach(function (block) {
                 var lines = block.trim().split('\n').filter(function (l) { return l.trim(); });
                 if (lines.length < 2) return;
                 var q = lines[0].replace(/^\d+[\.\)]\s*|\*\*Q\d+[\.\)]?\*\*\s*/, '').replace(/^\*+|\*+$/g, '').trim();
                 var opts = [], answers = [];
                 lines.slice(1).forEach(function (l) {
-                    var isCorrect = l.indexOf('\u2713') !== -1 || l.indexOf('(correct)') !== -1 || l.indexOf('[correct]') !== -1;
+                    var isC = l.indexOf('\u2713') !== -1 || l.indexOf('(correct)') !== -1 || l.indexOf('[correct]') !== -1;
                     var text = l.replace(/^[-*\u2022]\s*|^\w[.)]\s*/, '').replace(/\u2713|\(correct\)|\[correct\]/g, '').trim();
-                    if (text) { opts.push(text); if (isCorrect) answers.push(opts.length - 1); }
+                    if (text) { opts.push(text); if (isC) answers.push(opts.length - 1); }
                 });
                 if (q && opts.length >= 2) quizData.push({ q: q, opts: opts, answers: answers });
             });
@@ -1469,41 +2294,35 @@
             var html = '';
             quizData.forEach(function (item, qi) {
                 html += '<div class="quiz-q"><div class="quiz-question">' + (qi + 1) + '. ' + item.q + '</div><div class="quiz-options">';
-                item.opts.forEach(function (opt, oi) {
-                    html += '<label class="quiz-opt" id="qopt-' + qi + '-' + oi + '"><input type="radio" name="q' + qi + '" value="' + oi + '" onchange="checkAnswer(' + qi + ',' + oi + ')"> ' + opt + '</label>';
-                });
+                item.opts.forEach(function (opt, oi) { html += '<label class="quiz-opt" id="qopt-' + qi + '-' + oi + '"><input type="radio" name="q' + qi + '" value="' + oi + '" onchange="checkAnswer(' + qi + ',' + oi + ')"> ' + opt + '</label>'; });
                 html += '</div></div>';
             });
             c.innerHTML = html;
         }
-        function checkAnswer(qi, selected) {
+        function checkAnswer(qi, sel) {
             var item = quizData[qi];
             item.opts.forEach(function (_, oi) {
                 var el = document.getElementById('qopt-' + qi + '-' + oi);
                 el.classList.remove('correct', 'wrong');
                 if (item.answers.indexOf(oi) !== -1) el.classList.add('correct');
-                else if (oi === selected) el.classList.add('wrong');
+                else if (oi === sel) el.classList.add('wrong');
                 el.querySelector('input').disabled = true;
             });
-            var allAnswered = quizData.every(function (_, qi) { return document.querySelector('input[name="q' + qi + '"]:checked'); });
-            if (allAnswered) {
-                var score = 0;
-                quizData.forEach(function (_, qi) { var sel = document.querySelector('input[name="q' + qi + '"]:checked'); if (sel && quizData[qi].answers.indexOf(parseInt(sel.value)) !== -1) score++; });
-                var div = document.createElement('div'); div.className = 'quiz-score'; div.innerHTML = 'Score: ' + score + ' / ' + quizData.length;
-                document.getElementById('quizContainer').appendChild(div);
-            }
+            var done = quizData.every(function (_, qi) { return document.querySelector('input[name="q' + qi + '"]:checked'); });
+            if (done) { var s = 0; quizData.forEach(function (_, qi) { var inp = document.querySelector('input[name="q' + qi + '"]:checked'); if (inp && quizData[qi].answers.indexOf(parseInt(inp.value)) !== -1) s++; }); var d = document.createElement('div'); d.className = 'quiz-score'; d.innerHTML = 'Score: ' + s + ' / ' + quizData.length; document.getElementById('quizContainer').appendChild(d); }
         }
-        function resetQuiz() { quizData = []; renderQuiz(); parseQuiz(); }
+        function resetQuiz() { renderQuiz(); }
 
+        // FLASHCARDS
         var cards = [], cardIdx = 0, seen = {};
         function parseFlash() {
-            var raw = cleanMd(document.getElementById('flash-raw') ? document.getElementById('flash-raw').textContent : '');
+            var raw = cleanMd(getRaw('flash-raw')); cards = [];
             raw.split('\n').forEach(function (l) {
                 var qm = l.match(/^Q:\s*(.+)/i), am = l.match(/^A:\s*(.+)/i);
                 if (qm) cards.push({ q: qm[1].trim(), a: '' });
                 else if (am && cards.length) cards[cards.length - 1].a = am[1].trim();
             });
-            if (!cards.length) cards = [{ q: 'Nessuna flashcard trovata.', a: 'Verifica il file 08_FLASHCARDS.md' }];
+            if (!cards.length) cards = [{ q: 'Nessuna flashcard trovata.', a: 'Verifica 08_FLASHCARDS.md' }];
             cardIdx = 0; renderCard(); renderDots();
         }
         function renderCard() {
@@ -1515,32 +2334,33 @@
         }
         function renderDots() {
             var dots = '';
-            cards.forEach(function (_, i) { var cls = i === cardIdx ? 'active' : seen[i] ? 'seen' : ''; dots += '<div class="flash-dot ' + cls + '"></div>'; });
+            cards.forEach(function (_, i) { var cls = i === cardIdx ? 'active' : seen[i] ? 'seen' : ''; dots += '<div class="flash-dot ' + cls + '" onclick="goCard(' + i + ')"></div>'; });
             document.getElementById('flashDots').innerHTML = dots;
         }
         function flipCard() { document.getElementById('flashcard').classList.toggle('flipped'); }
         function nextCard() { cardIdx = (cardIdx + 1) % cards.length; renderCard(); }
         function prevCard() { cardIdx = (cardIdx - 1 + cards.length) % cards.length; renderCard(); }
+        function goCard(i) { cardIdx = i; renderCard(); }
         document.addEventListener('keydown', function (e) {
             if (e.key === 'ArrowRight') nextCard();
             if (e.key === 'ArrowLeft') prevCard();
             if (e.key === ' ') { e.preventDefault(); flipCard(); }
+            if (e.key === 'Escape') closeModal();
         });
 
+        // AUDIO
         function toggleAudio() {
-            var audio = document.getElementById('audioEl'), btn = document.getElementById('playBtn');
-            var bars = document.querySelectorAll('.audio-bar');
-            if (audio.paused) { audio.play(); btn.innerHTML = '&#9646;&#9646;'; bars.forEach(function (b) { b.classList.add('playing'); }); }
-            else { audio.pause(); btn.innerHTML = '&#9654;'; bars.forEach(function (b) { b.classList.remove('playing'); }); }
+            var audio = document.getElementById('audioEl'), btn = document.getElementById('playBtn'), bars = document.querySelectorAll('.audio-bar');
+            if (audio.paused) { audio.play(); btn.innerHTML = '⏸'; bars.forEach(function (b) { b.classList.add('playing'); }); }
+            else { audio.pause(); btn.innerHTML = '▶'; bars.forEach(function (b) { b.classList.remove('playing'); }); }
         }
-        function stopAudio() { document.getElementById('playBtn').innerHTML = '&#9654;'; document.querySelectorAll('.audio-bar').forEach(function (b) { b.classList.remove('playing'); }); }
+        function stopAudio() { document.getElementById('playBtn').innerHTML = '▶'; document.querySelectorAll('.audio-bar').forEach(function (b) { b.classList.remove('playing'); }); }
 
-        function downloadFile(f) { var a = document.createElement('a'); a.href = f; a.download = f; a.click(); }
-
+        // EXPORT PDF
         function exportPDF() {
             var activeTabId = '';
-            var activeTab = document.querySelector('.tab.active');
-            if (activeTab) activeTabId = activeTab.id.replace('tab-', '');
+            var at = document.querySelector('.tab.active');
+            if (at) activeTabId = at.id.replace('tab-', '');
             document.querySelectorAll('.tab-panel').forEach(function (p) { p.style.display = 'block'; });
             window.print();
             setTimeout(function () {
