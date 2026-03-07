@@ -10,7 +10,22 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+    <!-- Course visibility controlled by pipeline placeholder -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var courseDisplay = '{{COURSE_DISPLAY}}';
+            document.querySelectorAll('.course-only').forEach(function (el) {
+                el.style.display = courseDisplay;
+            });
+        });
+    </script>
     <style>
+        .course-only {
+            display: none;
+        }
+
+        /* default hidden — overridden by script above */
+
         :root {
             --void: #080C12;
             --deep: #0F1C2E;
@@ -24,7 +39,7 @@
             --glass-border: rgba(255, 255, 255, 0.08);
             --grad-main: linear-gradient(135deg, #00E5FF, #FF2FD6);
             --grad-deep: radial-gradient(circle at 30% 50%, rgba(0, 229, 255, 0.06), #080C12 70%);
-            --sidebar-w: 300px;
+            --sidebar-w: 240px;
         }
 
         * {
@@ -182,7 +197,7 @@
             cursor: pointer;
             font-size: 12px;
             font-weight: 500;
-            color: rgba(200, 204, 214, 0.45);
+            color: rgba(200, 204, 214, 0.75);
             transition: all 0.15s;
             margin-bottom: 2px;
             border: 1px solid transparent;
@@ -203,7 +218,7 @@
             width: 14px;
             text-align: center;
             font-size: 10px;
-            opacity: 0.6;
+            opacity: 0.7;
         }
 
         .sidebar-item.active i {
@@ -292,7 +307,7 @@
             text-transform: uppercase;
         }
 
-        /* FILE BUTTONS — apre modal */
+        /* FILE BUTTONS */
         .file-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -399,7 +414,7 @@
         .file-btn-name {
             font-size: 9px;
             font-weight: 700;
-            color: rgba(200, 204, 214, 0.6);
+            color: rgba(200, 204, 214, 0.65);
             letter-spacing: 0.3px;
             line-height: 1.2;
         }
@@ -465,7 +480,7 @@
 
         .kanban-card-sub {
             font-size: 10px;
-            color: rgba(200, 204, 214, 0.35);
+            color: rgba(200, 204, 214, 0.4);
             margin-bottom: 10px;
             line-height: 1.5;
         }
@@ -539,7 +554,7 @@
             padding: 26px 32px 60px;
             background: var(--grad-deep);
             min-height: 100%;
-            max-width: 100%;
+            max-width: 960px;
             overflow-x: hidden;
         }
 
@@ -565,7 +580,7 @@
 
         .page-sub {
             font-size: 11px;
-            color: rgba(200, 204, 214, 0.28);
+            color: rgba(200, 204, 214, 0.35);
         }
 
         .page-header-actions {
@@ -578,7 +593,7 @@
         .btn-action {
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(200, 204, 214, 0.5);
+            color: rgba(200, 204, 214, 0.65);
             padding: 7px 13px;
             border-radius: 7px;
             font-family: 'Manrope', sans-serif;
@@ -610,38 +625,41 @@
         /* TABS */
         .tabs {
             display: flex;
-            gap: 2px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            flex-wrap: wrap;
+            gap: 4px;
+            background: rgba(15, 28, 46, 0.55);
+            border: 1px solid rgba(0, 229, 255, 0.08);
+            border-radius: 12px;
+            padding: 6px;
             margin-bottom: 22px;
-            overflow-x: auto;
-            scrollbar-width: none;
-        }
-
-        .tabs::-webkit-scrollbar {
-            display: none;
+            backdrop-filter: blur(12px);
         }
 
         .tab {
-            padding: 8px 16px;
+            padding: 7px 14px;
             font-size: 10px;
             font-weight: 700;
-            letter-spacing: 1.5px;
+            letter-spacing: 1.2px;
             text-transform: uppercase;
             cursor: pointer;
-            color: rgba(200, 204, 214, 0.3);
-            border-bottom: 2px solid transparent;
+            color: rgba(200, 204, 214, 0.55);
+            border-radius: 8px;
+            border: 1px solid transparent;
             transition: all 0.15s;
             white-space: nowrap;
-            flex-shrink: 0;
         }
 
         .tab:hover {
             color: var(--silver);
+            background: rgba(0, 229, 255, 0.06);
+            border-color: rgba(0, 229, 255, 0.12);
         }
 
         .tab.active {
-            color: var(--cyan);
-            border-bottom-color: var(--cyan);
+            background: linear-gradient(135deg, var(--cyan), var(--teal));
+            color: #080C12;
+            border-color: transparent;
+            box-shadow: 0 0 12px rgba(0, 229, 255, 0.25);
         }
 
         .tab-panel {
@@ -711,14 +729,14 @@
             font-weight: 700;
             letter-spacing: 2px;
             text-transform: uppercase;
-            color: rgba(200, 204, 214, 0.22);
+            color: rgba(200, 204, 214, 0.25);
             margin-bottom: 16px;
         }
 
         /* MD BODY */
         .md-body {
             font-size: 13px;
-            color: rgba(200, 204, 214, 0.8);
+            color: rgba(200, 204, 214, 0.82);
             line-height: 1.85;
             overflow-wrap: break-word;
             word-wrap: break-word;
@@ -773,7 +791,7 @@
         }
 
         .md-body em {
-            color: rgba(200, 204, 214, 0.6);
+            color: rgba(200, 204, 214, 0.65);
         }
 
         .md-body code {
@@ -840,7 +858,7 @@
         .md-body blockquote {
             border-left: 3px solid var(--cyan);
             padding: 9px 14px;
-            color: rgba(200, 204, 214, 0.5);
+            color: rgba(200, 204, 214, 0.55);
             margin: 11px 0;
             font-style: italic;
             background: rgba(0, 229, 255, 0.03);
@@ -890,7 +908,7 @@
             border: 1px solid var(--glass-border);
             cursor: pointer;
             font-size: 12px;
-            color: rgba(200, 204, 214, 0.6);
+            color: rgba(200, 204, 214, 0.65);
             transition: all 0.15s;
         }
 
@@ -1297,7 +1315,7 @@
 
         .source-url {
             font-size: 11px;
-            color: rgba(200, 204, 214, 0.5);
+            color: rgba(200, 204, 214, 0.55);
             text-decoration: none;
             word-break: break-all;
             line-height: 1.5;
@@ -1335,7 +1353,7 @@
             z-index: 0;
         }
 
-        /* ===== MODAL EXPORT ===== */
+        /* MODAL */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -1397,8 +1415,6 @@
             flex-shrink: 0;
         }
 
-        .modal-title-block {}
-
         .modal-title {
             font-family: 'Orbitron', sans-serif;
             font-size: 11px;
@@ -1453,15 +1469,6 @@
             padding: 16px;
             max-height: 280px;
             overflow-y: auto;
-        }
-
-        .modal-preview-rendered {
-            font-size: 12px;
-            color: rgba(200, 204, 214, 0.75);
-            line-height: 1.7;
-            max-height: 280px;
-            overflow-y: auto;
-            padding: 4px;
         }
 
         .modal-preview-img {
@@ -1622,6 +1629,111 @@
             display: inline-block;
         }
 
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            :root {
+                --sidebar-w: 0px;
+            }
+
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                padding: 16px 16px 80px;
+                max-width: 100%;
+            }
+
+            .header {
+                padding: 10px 16px;
+                gap: 8px;
+            }
+
+            .header-meta {
+                display: none;
+            }
+
+            .logo {
+                font-size: 10px;
+                letter-spacing: 2px;
+            }
+
+            .btn-nb {
+                display: none;
+            }
+
+            .btn-pdf-header {
+                padding: 6px 12px;
+                font-size: 10px;
+            }
+
+            .page-title {
+                font-size: 16px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .page-header-actions {
+                display: flex;
+                gap: 6px;
+            }
+
+            .tab {
+                padding: 7px 10px;
+                font-size: 9px;
+                letter-spacing: 0.8px;
+            }
+
+            .content-card {
+                padding: 18px 16px;
+            }
+
+            .md-body {
+                font-size: 12px;
+            }
+
+            .media-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .file-grid {
+                display: none;
+            }
+
+            .modal {
+                max-width: 100%;
+                margin: 0;
+                border-radius: 12px 12px 0 0;
+            }
+
+            .modal-overlay {
+                align-items: flex-end;
+                padding: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 14px;
+            }
+
+            .tab {
+                padding: 6px 9px;
+                font-size: 8px;
+            }
+
+            .media-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         /* PRINT */
         @media print {
 
@@ -1668,6 +1780,7 @@
             .main {
                 padding: 20px !important;
                 background: #fff !important;
+                max-width: 100% !important;
             }
 
             .tab-panel {
@@ -1829,6 +1942,15 @@
                 </div>
                 <div class="sidebar-item" onclick="showTab('checklist')"><i class="fa-solid fa-list-check"></i>
                     Checklist</div>
+                <!-- COURSE CREATOR EXTRA — visibili solo se MODE=COURSE_CREATOR -->
+                <div class="sidebar-item course-only" onclick="showTab('curriculum')"><i class="fa-solid fa-map"></i>
+                    Curriculum Map</div>
+                <div class="sidebar-item course-only" onclick="showTab('lessons')"><i
+                        class="fa-solid fa-chalkboard-user"></i> Lesson Scripts</div>
+                <div class="sidebar-item course-only" onclick="showTab('worksheets')"><i
+                        class="fa-solid fa-file-pen"></i> Worksheets</div>
+                <div class="sidebar-item course-only" onclick="showTab('skool')"><i class="fa-solid fa-cog"></i> Skool
+                    Setup</div>
                 <div class="sidebar-item" onclick="showTab('quiz')"><i class="fa-solid fa-circle-question"></i> Quiz
                 </div>
                 <div class="sidebar-item" onclick="showTab('flash')"><i class="fa-solid fa-layer-group"></i> Flashcards
@@ -1836,6 +1958,7 @@
                 <div class="sidebar-item" onclick="showTab('media')"><i class="fa-solid fa-photo-film"></i> Media</div>
                 <div class="sidebar-item" onclick="showTab('sources')"><i class="fa-solid fa-link"></i> Fonti</div>
             </div>
+
             <div class="sidebar-section">
                 <div class="sidebar-label">Scarica File</div>
                 <div class="file-grid">
@@ -1893,6 +2016,7 @@
                             class="fa-solid fa-arrow-up-right-from-square"></i> Apri in NotebookLM</a>
                 </div>
             </div>
+
             <div class="sidebar-section">
                 <div class="stats-row">
                     <div class="stat-chip">
@@ -1905,12 +2029,12 @@
                     </div>
                 </div>
             </div>
+
             <div class="sidebar-section">
                 <div class="sidebar-label">Push to Kanban</div>
                 <div class="kanban-card">
                     <div class="kanban-card-title"><i class="fa-solid fa-table-columns"></i> AI Content Factory</div>
-                    <div class="kanban-card-sub">Genera card JSON dal brief per il Kanban board. Usa domani per
-                        collegare le pipeline.</div>
+                    <div class="kanban-card-sub">Genera card JSON dal brief per il Kanban board.</div>
                     <button class="btn-kanban" onclick="openModal('kanban')"><i class="fa-solid fa-eye"></i> Anteprima +
                         Export</button>
                     <button class="btn-kanban-copy" onclick="quickCopyJson()"><i class="fa-solid fa-copy"></i> Copia
@@ -1929,20 +2053,24 @@
                 <div class="page-header-actions">
                     <button class="btn-action" onclick="copyAllText()"><i class="fa-solid fa-copy"></i> Copia
                         tutto</button>
-                    <button class="btn-action btn-action-primary" onclick="exportPDF()"><i
-                            class="fa-solid fa-file-export"></i> PDF</button>
                 </div>
             </div>
+
             <div class="tabs">
                 <div class="tab active" id="tab-brief" onclick="showTab('brief')">Brief</div>
                 <div class="tab" id="tab-doc" onclick="showTab('doc')">Doc</div>
                 <div class="tab" id="tab-script" onclick="showTab('script')">Script</div>
                 <div class="tab" id="tab-checklist" onclick="showTab('checklist')">Checklist</div>
+                <div class="tab course-only" id="tab-curriculum" onclick="showTab('curriculum')">Curriculum</div>
+                <div class="tab course-only" id="tab-lessons" onclick="showTab('lessons')">Lezioni</div>
+                <div class="tab course-only" id="tab-worksheets" onclick="showTab('worksheets')">Worksheets</div>
+                <div class="tab course-only" id="tab-skool" onclick="showTab('skool')">Skool</div>
                 <div class="tab" id="tab-quiz" onclick="showTab('quiz')">Quiz</div>
                 <div class="tab" id="tab-flash" onclick="showTab('flash')">Flashcards</div>
                 <div class="tab" id="tab-media" onclick="showTab('media')">Media</div>
                 <div class="tab" id="tab-sources" onclick="showTab('sources')">Fonti</div>
             </div>
+
             <div class="tab-panel active" id="panel-brief">
                 <div class="content-card card-brief">
                     <div class="content-card-label">Master Brief</div>
@@ -2007,17 +2135,20 @@
                         <div class="media-card" onclick="openModal('audio')">
                             <div class="media-icon">🎧</div>
                             <div class="media-label">Audio Brief</div>
-                            <div class="media-sub">09_AUDIO_BRIEF.mp3</div><span class="badge-ready">PRONTO</span>
+                            <div class="media-sub">09_AUDIO_BRIEF.mp3</div>
+                            <span class="badge-ready">PRONTO</span>
                         </div>
                         <div class="media-card" onclick="openModal('slides')">
                             <div class="media-icon">📊</div>
                             <div class="media-label">Slide Deck</div>
-                            <div class="media-sub">11_SLIDE_DECK.pdf</div><span class="badge-ready">PRONTO</span>
+                            <div class="media-sub">11_SLIDE_DECK.pdf</div>
+                            <span class="badge-ready">PRONTO</span>
                         </div>
                         <div class="media-card" onclick="openModal('infographic')">
                             <div class="media-icon">🖼</div>
                             <div class="media-label">Infografica</div>
-                            <div class="media-sub">10_INFOGRAPHIC.png</div><span class="badge-ready">PRONTO</span>
+                            <div class="media-sub">10_INFOGRAPHIC.png</div>
+                            <span class="badge-ready">PRONTO</span>
                         </div>
                     </div>
                     <div class="audio-player">
@@ -2041,7 +2172,8 @@
                     </div>
                     <div class="section-sep"></div>
                     <div class="content-card-label">Infografica</div>
-                    <div class="infographic-container"><img src="10_INFOGRAPHIC.png" alt="Infografica"
+                    <div class="infographic-container">
+                        <img src="10_INFOGRAPHIC.png" alt="Infografica"
                             onerror="this.parentElement.innerHTML='<div style=padding:36px;text-align:center;color:rgba(200,204,214,0.2);font-size:12px>Infografica non disponibile</div>'">
                     </div>
                 </div>
@@ -2050,6 +2182,32 @@
                 <div class="content-card card-sources">
                     <div class="content-card-label">Fonti Gold</div>
                     <div id="sourcesList">{{SOURCES_LIST}}</div>
+                </div>
+            </div>
+
+            <!-- COURSE CREATOR PANELS -->
+            <div class="tab-panel" id="panel-curriculum">
+                <div class="content-card card-doc">
+                    <div class="content-card-label">Curriculum Map</div>
+                    <div class="md-body" id="curriculumBody"></div>
+                </div>
+            </div>
+            <div class="tab-panel" id="panel-lessons">
+                <div class="content-card card-script">
+                    <div class="content-card-label">Lesson Scripts</div>
+                    <div class="md-body" id="lessonsBody"></div>
+                </div>
+            </div>
+            <div class="tab-panel" id="panel-worksheets">
+                <div class="content-card card-checklist">
+                    <div class="content-card-label">Worksheets</div>
+                    <div class="md-body" id="worksheetsBody"></div>
+                </div>
+            </div>
+            <div class="tab-panel" id="panel-skool">
+                <div class="content-card card-brief">
+                    <div class="content-card-label">Skool Setup Guide</div>
+                    <div class="md-body" id="skoolBody"></div>
                 </div>
             </div>
         </main>
@@ -2082,6 +2240,10 @@
     <script type="text/markdown" id="md-doc">{{CONTENT_DOC}}</script>
     <script type="text/markdown" id="md-script">{{CONTENT_SCRIPT}}</script>
     <script type="text/markdown" id="md-checklist">{{CONTENT_CHECKLIST}}</script>
+    <script type="text/markdown" id="md-curriculum">{{CONTENT_CURRICULUM}}</script>
+    <script type="text/markdown" id="md-lessons">{{CONTENT_LESSONS}}</script>
+    <script type="text/markdown" id="md-worksheets">{{CONTENT_WORKSHEETS}}</script>
+    <script type="text/markdown" id="md-skool">{{CONTENT_SKOOL_SETUP}}</script>
     <script type="text/plain" id="quiz-raw">{{CONTENT_QUIZ_RAW}}</script>
     <script type="text/plain" id="flash-raw">{{CONTENT_FLASHCARDS_RAW}}</script>
 
@@ -2135,6 +2297,10 @@
             audio: { title: 'AUDIO BRIEF', subtitle: '09_AUDIO_BRIEF.mp3', icon: '🎧', color: '#7A6CFF', top: 'linear-gradient(90deg,#7A6CFF,#00E5FF)', type: 'audio' },
             infographic: { title: 'INFOGRAFICA', subtitle: '10_INFOGRAPHIC.png', icon: '🖼', color: '#FF2FD6', top: 'linear-gradient(90deg,#FF2FD6,#7A6CFF)', type: 'image' },
             slides: { title: 'SLIDE DECK', subtitle: '11_SLIDE_DECK.pdf', icon: '📊', color: '#00E5FF', top: 'linear-gradient(90deg,#00E5FF,#FF2FD6)', type: 'pdf' },
+            curriculum: { title: 'CURRICULUM MAP', subtitle: '05_CURRICULUM_MAP.md', icon: '🗺', color: '#7A6CFF', top: 'linear-gradient(90deg,#7A6CFF,#00E5FF)', src: 'md-curriculum', type: 'md' },
+            lessons: { title: 'LESSON SCRIPTS', subtitle: '06_LESSON_SCRIPTS.md', icon: '🎙', color: '#2EF2C9', top: 'linear-gradient(90deg,#2EF2C9,#7A6CFF)', src: 'md-lessons', type: 'md' },
+            worksheets: { title: 'WORKSHEETS', subtitle: '07_WORKSHEETS.md', icon: '✅', color: '#FFB547', top: 'linear-gradient(90deg,#FFB547,#2EF2C9)', src: 'md-worksheets', type: 'md' },
+            skool: { title: 'SKOOL SETUP', subtitle: '08_SKOOL_SETUP.md', icon: '⚙', color: '#00E5FF', top: 'linear-gradient(90deg,#00E5FF,#2EF2C9)', src: 'md-skool', type: 'md' },
             kanban: { title: 'KANBAN EXPORT', subtitle: 'AI Content Factory JSON', icon: '⚡', color: '#FF2FD6', top: 'linear-gradient(90deg,#FF2FD6,#7A6CFF)', type: 'kanban' }
         };
 
@@ -2153,12 +2319,13 @@
             document.getElementById('modalToast').classList.remove('show');
             if (cfg.type === 'md') {
                 var raw = cleanMd(getRaw(cfg.src));
+                var jsonFilename = cfg.subtitle.replace('.md', '.json');
                 preview.innerHTML = '<div class="modal-preview-text">' + escHtml(raw.substring(0, 2000)) + (raw.length > 2000 ? '\n\n[... continua ...]' : '') + '</div>';
                 actions.innerHTML =
                     '<button class="mbtn mbtn-txt" onclick="dlBlob(\'' + cfg.src + '\',\'' + cfg.subtitle + '\',\'text/plain\')"><i class="fa-solid fa-file-lines"></i> Testo .txt</button>' +
-                    '<button class="mbtn mbtn-txt" onclick="dlBlob(\'' + cfg.src + '\',\'' + cfg.subtitle.replace('.md', '.md') + '\',\'text/markdown\')"><i class="fa-solid fa-file-code"></i> Markdown .md</button>' +
+                    '<button class="mbtn mbtn-txt" onclick="dlBlob(\'' + cfg.src + '\',\'' + cfg.subtitle + '\',\'text/markdown\')"><i class="fa-solid fa-file-code"></i> Markdown .md</button>' +
                     '<button class="mbtn mbtn-pdf" onclick="printSingle(\'' + cfg.src + '\',\'' + cfg.title + '\')"><i class="fa-solid fa-file-pdf"></i> PDF stampa</button>' +
-                    '<button class="mbtn mbtn-json" onclick="dlJson(\'' + cfg.src + '\',\'' + cfg.subtitle.replace('.md', '.json') + '\')"><i class="fa-solid fa-brackets-curly"></i> JSON</button>' +
+                    '<button class="mbtn mbtn-json" onclick="dlJson(\'' + cfg.src + '\',\'' + jsonFilename + '\')"><i class="fa-solid fa-brackets-curly"></i> JSON</button>' +
                     '<button class="mbtn mbtn-copy" onclick="copyRaw(\'' + cfg.src + '\')"><i class="fa-solid fa-copy"></i> Copia testo</button>';
             } else if (cfg.type === 'audio') {
                 preview.innerHTML = '<div style="padding:16px 0"><div style="font-size:11px;color:rgba(200,204,214,0.4);margin-bottom:12px;">Player audio — 09_AUDIO_BRIEF.mp3</div><audio class="modal-preview-audio" controls src="09_AUDIO_BRIEF.mp3"></audio></div>';
@@ -2171,7 +2338,7 @@
             } else if (cfg.type === 'pdf') {
                 preview.innerHTML = '<div class="modal-preview-pdf"><div class="modal-preview-pdf-icon">📊</div><div class="modal-preview-pdf-name">11_SLIDE_DECK.pdf</div><div class="modal-preview-pdf-sub">Slide deck generato da NotebookLM</div></div>';
                 actions.innerHTML = '<button class="mbtn mbtn-pdf" onclick="window.open(\'11_SLIDE_DECK.pdf\',\'_blank\')"><i class="fa-solid fa-file-pdf"></i> Apri PDF</button>' +
-                    '<button class="mbtn mbtn-open" onclick="dlFile(\'11_SLIDE_DECK.pdf\')"><i class="fa-solid fa-download"></i> Scarica</button>';
+                    '<button class="mbtn mbtn-open" onclick="window.open(\'11_SLIDE_DECK.pdf\',\'_blank\')"><i class="fa-solid fa-download"></i> Scarica</button>';
             } else if (cfg.type === 'kanban') {
                 var cards = buildKanbanCards();
                 var json = JSON.stringify(cards, null, 2);
@@ -2218,7 +2385,6 @@
             setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
             showModalToast('✓ JSON scaricato!');
         }
-        function dlFile(filename) { window.open(filename, '_blank'); }
         function dlImg() { var a = document.createElement('a'); a.href = '10_INFOGRAPHIC.png'; a.download = '10_INFOGRAPHIC.png'; a.click(); }
 
         function printSingle(src, title) {
@@ -2245,8 +2411,7 @@
             ];
         }
         function copyJsonFromModal() {
-            var cards = buildKanbanCards();
-            navigator.clipboard.writeText(JSON.stringify(cards, null, 2)).then(function () { showModalToast('✓ JSON copiato negli appunti!'); });
+            navigator.clipboard.writeText(JSON.stringify(buildKanbanCards(), null, 2)).then(function () { showModalToast('✓ JSON copiato!'); });
         }
         function pushLocalStorage() {
             var cards = buildKanbanCards();
@@ -2309,7 +2474,12 @@
                 el.querySelector('input').disabled = true;
             });
             var done = quizData.every(function (_, qi) { return document.querySelector('input[name="q' + qi + '"]:checked'); });
-            if (done) { var s = 0; quizData.forEach(function (_, qi) { var inp = document.querySelector('input[name="q' + qi + '"]:checked'); if (inp && quizData[qi].answers.indexOf(parseInt(inp.value)) !== -1) s++; }); var d = document.createElement('div'); d.className = 'quiz-score'; d.innerHTML = 'Score: ' + s + ' / ' + quizData.length; document.getElementById('quizContainer').appendChild(d); }
+            if (done) {
+                var s = 0;
+                quizData.forEach(function (_, qi) { var inp = document.querySelector('input[name="q' + qi + '"]:checked'); if (inp && quizData[qi].answers.indexOf(parseInt(inp.value)) !== -1) s++; });
+                var d = document.createElement('div'); d.className = 'quiz-score'; d.innerHTML = 'Score: ' + s + ' / ' + quizData.length;
+                document.getElementById('quizContainer').appendChild(d);
+            }
         }
         function resetQuiz() { renderQuiz(); }
 
@@ -2341,6 +2511,7 @@
         function nextCard() { cardIdx = (cardIdx + 1) % cards.length; renderCard(); }
         function prevCard() { cardIdx = (cardIdx - 1 + cards.length) % cards.length; renderCard(); }
         function goCard(i) { cardIdx = i; renderCard(); }
+
         document.addEventListener('keydown', function (e) {
             if (e.key === 'ArrowRight') nextCard();
             if (e.key === 'ArrowLeft') prevCard();
@@ -2356,7 +2527,7 @@
         }
         function stopAudio() { document.getElementById('playBtn').innerHTML = '▶'; document.querySelectorAll('.audio-bar').forEach(function (b) { b.classList.remove('playing'); }); }
 
-        // EXPORT PDF
+        // EXPORT PDF (window.print — tutti i pannelli visibili)
         function exportPDF() {
             var activeTabId = '';
             var at = document.querySelector('.tab.active');
@@ -2374,6 +2545,10 @@
             renderMd('md-doc', 'docBody');
             renderMd('md-script', 'scriptBody');
             renderMd('md-checklist', 'checklistBody');
+            renderMd('md-curriculum', 'curriculumBody');
+            renderMd('md-lessons', 'lessonsBody');
+            renderMd('md-worksheets', 'worksheetsBody');
+            renderMd('md-skool', 'skoolBody');
             parseQuiz();
             parseFlash();
         });
