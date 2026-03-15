@@ -13,6 +13,9 @@ triggers:
   - "genera documenti da"
   - "usa notebook"
   - "tsw mode"
+  - "course creator"
+  - "crea corso"
+  - "curriculum"
 requires:
   - notebooklm-py >= 0.3.3 (CLI nel PATH)
   - notebooklm autenticato
@@ -54,7 +57,7 @@ Chiedi all'utente (in un'unica domanda):
 > 4. Note aggiuntive (opzionale): tono, industry, competitor, piattaforma target"
 
 Poi imposta queste variabili:
-- `MODE` = CONTENT_PACK | MARKETING_INTEL | MEETING_PREP
+- `MODE` = CONTENT_PACK | MARKETING_INTEL | MEETING_PREP | COURSE_CREATOR
 - `TOPIC` = stringa topic
 - `NOTEBOOK_ID` = ID notebook esistente (oppure null → crea nuovo)
 - `OUTPUT` = TUTTO | DOCS_ONLY | MEDIA_ONLY
@@ -315,10 +318,26 @@ notebooklm ask "Content calendar 4 settimane: data, piattaforma, tipo contenuto,
 
 ---
 
+### 3.7 — Solo se MODE=COURSE_CREATOR
+
+```powershell
+notebooklm ask "Scrivi una CURRICULUM MAP completa in italiano seguendo il template TPL_curriculum_map: 1) Intestazione Corso, 2) Mappa Moduli, 3) Struttura per ogni modulo, 4) Sequenza Email collegata. Basati sulle fonti." > "[RUN_FOLDER]\05_CURRICULUM_MAP.md"
+
+notebooklm ask "Genera gli script dettagliati per le lezioni del Modulo 1 e 2. Ogni script: Hook, Core Content, Action Step." > "[RUN_FOLDER]\06_LESSON_SCRIPTS.md"
+
+notebooklm ask "Crea 3 worksheets/esercitazioni pratiche in markdown che portino lo studente a produrre il primo output tangibile." > "[RUN_FOLDER]\07_WORKSHEETS.md"
+
+notebooklm ask "Genera una guida tecnica Skool Setup: Categorie Classroom, Gamification (Gems/Levels), Messaggio benvenuto." > "[RUN_FOLDER]\08_SKOOL_SETUP.md"
+```
+
+> **SELF-HEALING:** Leggi ognuno dei 4 file appena generati. Rimuovi pollution CLI da ciascuno. Verifica che nessuno sia vuoto o corrotto.
+
+---
+
 ## Phase 4 — Artifact Media
 
-### ⚠️ ORDINE CRITICO per MARKETING_INTEL
-Se MODE=MARKETING_INTEL, verifica che `11_CONTENT_CALENDAR.md` esista prima di procedere. Gli artifact usano prefissi 12-16 per evitare conflitti con i documenti strategici.
+### ⚠️ ORDINE CRITICO per MARKETING_INTEL / COURSE_CREATOR
+Se MODE=MARKETING_INTEL, verifica che `11_CONTENT_CALENDAR.md` esista. Se MODE=COURSE_CREATOR, verifica che `08_SKOOL_SETUP.md` esista. Gli artifact usano prefissi 12-16 (o successivi) per evitare conflitti.
 
 ```powershell
 notebooklm generate audio --no-wait
@@ -422,6 +441,25 @@ $html = $html.Replace("{{CONTENT_BRIEF}}", $brief)
 $html = $html.Replace("{{CONTENT_DOC}}", $doc)
 $html = $html.Replace("{{CONTENT_SCRIPT}}", $script)
 $html = $html.Replace("{{CONTENT_CHECKLIST}}", $checklist)
+
+if ($MODE -eq "COURSE_CREATOR") {
+    $curriculum = [System.IO.File]::ReadAllText("$RUN_FOLDER\05_CURRICULUM_MAP.md", [System.Text.Encoding]::UTF8)
+    $lessons    = [System.IO.File]::ReadAllText("$RUN_FOLDER\06_LESSON_SCRIPTS.md", [System.Text.Encoding]::UTF8)
+    $worksheets = [System.IO.File]::ReadAllText("$RUN_FOLDER\07_WORKSHEETS.md", [System.Text.Encoding]::UTF8)
+    $skool      = [System.IO.File]::ReadAllText("$RUN_FOLDER\08_SKOOL_SETUP.md", [System.Text.Encoding]::UTF8)
+    $html = $html.Replace("{{CONTENT_CURRICULUM}}", $curriculum)
+    $html = $html.Replace("{{CONTENT_LESSONS}}", $lessons)
+    $html = $html.Replace("{{CONTENT_WORKSHEETS}}", $worksheets)
+    $html = $html.Replace("{{CONTENT_SKOOL_SETUP}}", $skool)
+    $html = $html.Replace("{{COURSE_DISPLAY}}", "flex")
+} else {
+    $html = $html.Replace("{{CONTENT_CURRICULUM}}", "")
+    $html = $html.Replace("{{CONTENT_LESSONS}}", "")
+    $html = $html.Replace("{{CONTENT_WORKSHEETS}}", "")
+    $html = $html.Replace("{{CONTENT_SKOOL_SETUP}}", "")
+    $html = $html.Replace("{{COURSE_DISPLAY}}", "none")
+}
+
 $html = $html.Replace("{{CONTENT_QUIZ_RAW}}", $quiz)
 $html = $html.Replace("{{CONTENT_FLASHCARDS_RAW}}", $flashcards)
 
@@ -523,6 +561,13 @@ TSW - [MODE] - [TOPIC]/
 ├── 10_ADS_ANGLES.md
 ├── 11_CONTENT_CALENDAR.md
 ├── 12_QUIZ.md → 16_SLIDE_DECK.pdf
+│
+│   ── COURSE_CREATOR (aggiuntivi):
+├── 05_CURRICULUM_MAP.md
+├── 06_LESSON_SCRIPTS.md
+├── 07_WORKSHEETS.md
+├── 08_SKOOL_SETUP.md
+├── 09_QUIZ.md → 13_SLIDE_DECK.pdf
 │
 ├── index.html                   ← dashboard offline-ready
 └── sources/

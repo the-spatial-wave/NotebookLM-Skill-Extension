@@ -1,129 +1,83 @@
-# THE SPATIAL WAVE — System OS
-### NotebookLM Skill Extension for AntiGravity
+# TSW System OS — NotebookLM Skill Extension
+**v2.5.0 · The Spatial Wave · Marzo 2026**
 
-> **Topic grezzo → NotebookLM → Documenti + Audio + Infografica + Dashboard HTML**
-
-Una pipeline completa che connette AntiGravity a NotebookLM per generare pacchetti documentali, artifact media e dashboard glassmorphic (Lyra palette) — tutto in locale, tutto automatizzato.
-
----
-
-## Cosa genera
-
-| File | Descrizione |
-|------|-------------|
-| `01_MASTER_BRIEF.md` | Brief strategico: target, pain point, CTA, KPI |
-| `02_MAIN_DOC.md` | Documento tecnico step-by-step |
-| `03_SCRIPT_LYRA.md` | Script voce per Lyra — tono calmo, autorevole |
-| `04_CHECKLIST.md` | Checklist operativa con tempi stimati |
-| `07_QUIZ.md` | Quiz 8 domande (NotebookLM Studio) |
-| `08_FLASHCARDS.md` | Flashcard Q&A (NotebookLM Studio) |
-| `09_AUDIO_BRIEF.mp3` | Audio overview podcast (NotebookLM Studio) |
-| `10_INFOGRAPHIC.png` | Infografica visuale (NotebookLM Studio) |
-| `11_SLIDE_DECK.pdf` | Slide deck (NotebookLM Studio) |
-| `index.html` | Dashboard HTML offline-ready (Lyra palette) |
+Skill per AntiGravity che automatizza la produzione di knowledge pack tramite NotebookLM.
+Da un topic o notebook esistente genera documenti, media e una dashboard HTML offline-ready.
 
 ---
 
-## Modi disponibili
+## Output per run
 
-- **CONTENT_PACK** — Pacchetto contenuti per Skool / Instagram / LinkedIn
-- **MARKETING_INTEL** — Competitor analysis + funnel + ads angles
-- **MEETING_PREP** — Briefing pre-call per partner o brand
-
----
-
-## Setup
-
-### 1. Installa dipendenze
-
-```bash
-pip install "notebooklm-py[browser]"
-playwright install chromium
-```
-
-### 2. Aggiungi al PATH (Windows)
-
-```bash
-[System.Environment]::SetEnvironmentVariable("PATH", $env:PATH + ";C:\Users\[TUO_USERNAME]\AppData\Roaming\Python\Python313\Scripts", "User")
-```
-
-### 3. Login NotebookLM
-
-```bash
-notebooklm login
-# Si apre Chromium — accedi con Google, poi premi ENTER nel terminale
-```
-
-### 4. Verifica
-
-```bash
-notebooklm list
-# Deve listare i tuoi notebook
-```
-
-### 5. Installa la skill in AntiGravity
-
-```bash
-notebooklm skill install antigravity
-```
-
-Oppure clona manualmente nella cartella skills di AntiGravity:
-
-```bash
-git clone https://github.com/the-spatial-wave/NotebookLM-Skill-Extension.git
-```
+| File | Contenuto |
+|---|---|
+| `01_MASTER_BRIEF.md` | Brief operativo: obiettivo, target, CTA, KPI |
+| `02_MAIN_DOC.md` | Documento principale step-by-step |
+| `03_SCRIPT_LYRA.md` | Script voce: autorevole, calmo, architettonico |
+| `04_CHECKLIST.md` | Checklist operativa con tempi e output |
+| `07_QUIZ.md` | Quiz interattivo 8 domande |
+| `08_FLASHCARDS.md` | Flashcard Q/A |
+| `09_AUDIO_BRIEF.mp3` | Audio narrazione Lyra Voice |
+| `10_INFOGRAPHIC.png` | Infografica portrait |
+| `11_SLIDE_DECK.pdf` | Slide deck |
+| `index.html` | Dashboard HTML offline completa |
 
 ---
 
-## Utilizzo
+## Dashboard v4
 
-Una volta installata la skill, parla ad AntiGravity in linguaggio naturale:
-
-```
-"Lancia pipeline TSW CONTENT_PACK sul topic WebXR 2026"
-
-"Crea un pacchetto contenuti su strategie Skool per creator italiani"
-
-"Analizza i competitor di XR Reset con MODE MARKETING_INTEL"
-
-"Meeting prep per una call con [Brand]"
-```
+- 8 tab di contenuto (Brief, Doc, Script, Checklist, Quiz, Flashcards, Media, Fonti)
+- Modal export per ogni file: TXT · MD · PDF · JSON · PNG
+- Push to Kanban → `localStorage('tsw_kanban_import')` per AI Content Factory
+- Offline-ready — nessuna dipendenza npm, tutto CDN
 
 ---
 
-## Dipendenze
+## MODE disponibili
 
-- [`notebooklm-py`](https://github.com/teng-lin/notebooklm-py) ≥ 0.3.3
-- AntiGravity (Google) con MCP `notebooklm-mcp` configurato
+| MODE | Use case |
+|---|---|
+| `CONTENT_PACK` | Pacchetto knowledge su qualsiasi topic |
+| `MARKETING_INTEL` | Analisi competitor, funnel, ads angles |
+| `MEETING_PREP` | Prep meeting con bio e friction map |
+| `COURSE_CREATOR` | Moduli formativi strutturati |
+
+---
+
+## Requisiti
+
+```bash
+pip install notebooklm-py --break-system-packages  # >= 0.3.3
+# Python >= 3.13
+# AntiGravity (Cursor/VSCode fork)
+```
 
 ---
 
 ## Struttura repo
 
 ```
-NotebookLM-Skill-Extension/
-├── SKILL.md                          ← istruzioni per AntiGravity
-├── README.md                         ← questo file
+├── SKILL.md                    ← skill principale
+├── templates/
+│   └── dashboard_template.html ← template dashboard v4
+├── prompts/                    ← prompt per ogni MODE
+├── assemble_dashboard.ps1      ← fallback PowerShell Phase 5
 ├── requirements.txt
-├── THE_SPATIAL_WAVE_SYSTEM_OS.pdf    ← System OS completo
-├── prompts/
-│   ├── CONTENT_PACK.md
-│   ├── MARKETING_INTEL.md
-│   └── MEETING_PREP.md
-└── templates/
-    └── dashboard_template.html
+└── LICENSE
 ```
 
 ---
 
-## Note tecniche
+## Rigenera dashboard (PowerShell)
 
-- Usa API non documentate di Google (`batchexecute` RPC) — può rompersi se Google cambia gli endpoint
-- Output sempre in locale, nessun dato inviato a servizi esterni
-- Notebook isolato per ogni run — nessuna contaminazione tra sessioni
-- Dashboard funziona offline (tutti i file in locale)
+```powershell
+$RUN = "C:\Users\admin\Dev\ai-skill-notebook-knowledge\TSW-[MODE]-[TOPIC_SAFE]"
+$TEMPLATE = "C:\Users\admin\Dev\NotebookLM-Skill-Extension-CLEAN\templates\dashboard_template.html"
+$html = [System.IO.File]::ReadAllText($TEMPLATE, [System.Text.Encoding]::UTF8)
+$html = $html.Replace("{{TOPIC}}","Il Tuo Topic")
+# ... sostituisci tutti i placeholder
+[System.IO.File]::WriteAllText("$RUN\index.html", $html, [System.Text.Encoding]::UTF8)
+```
 
 ---
 
-*The Spatial Wave — Lyra System OS*
-*[thespatialwave.com](https://thespatialwave.com)*
+*The Spatial Wave · [thespatialwave.com](https://thespatialwave.com)*
