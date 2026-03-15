@@ -1,5 +1,9 @@
 {
   "outputDirectory": ".",
   "buildCommand": "",
-  "installCommand": ""
+  "installCommand": "",
+  "routes": [
+    { "src": "/", "dest": "/templates/dashboard_template.html" },
+    { "src": "/(.*)", "dest": "/$1" }
+  ]
 }
